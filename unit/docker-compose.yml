@@ -1,0 +1,25 @@
+version: "3.6"
+services:
+
+  server:
+    build: image/.
+    container_name: unit
+    hostname: unit
+    image: 172.16.16.1:5000/unit:latest
+    labels:
+      container_group: unit
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+    - local
+    ports:
+    - 80:80
+    - 8080:8080
+    - 9090:9090
+    restart: unless-stopped
+    volumes:
+    - unit_node_modules:/usr/lib/node_modules
+    - /opt/www:/www
+    - $HOME/.pip/pip.conf:/etc/pip.conf:ro

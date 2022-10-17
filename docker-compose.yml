@@ -1,0 +1,103 @@
+version: '3'
+services:
+  drone-runner:
+    depends_on:
+      - drone-server
+    extends:
+      file: drone/docker-compose.yml
+      service: runner
+
+  drone-server:
+    depends_on:
+      - gogs
+      - postgres
+    extends:
+      file: drone/docker-compose.yml
+      service: server
+
+  gogs:
+    depends_on:
+      - postgres
+    extends:
+      file: gogs/docker-compose.yml
+      service: server
+
+### Uncomment to add monitoring
+# grafana:
+#   depends_on:
+#     - influxdb
+#   extends:
+#     file: monitor/docker-compose.yml
+#     service: grafana
+#
+# influxdb:
+#   extends:
+#     file: monitor/docker-compose.yml
+#     service: influxdb
+#
+#  mongo:
+#    extends:
+#      file: mongo/docker-compose.yml
+#      service: server
+#
+#  mongo-ui:
+#    depends_on:
+#      - mongo
+#    extends:
+#      file: mongo/docker-compose.yml
+#      service: ui
+
+  pgadmin:
+    depends_on:
+      - postgres
+    extends:
+      file: postgres/docker-compose.yml
+      service: pgadmin
+
+  postgres:
+    extends:
+      file: postgres/docker-compose.yml
+      service: server
+
+  pypi-server:
+    extends:
+      file: pypi/docker-compose.yml
+      service: server
+
+  registry:
+    extends:
+      file: registry/docker-compose.yml
+      service: server
+
+  registry-ui:
+    depends_on:
+      - registry
+    extends:
+      file: registry/docker-compose.yml
+      service: ui
+
+  selenium:
+    extends:
+      file: selenium/docker-compose.yml
+      service: server
+
+### Uncomment to add monitoring
+# telegraf:
+#   depends_on:
+#     - influxdb
+#   extends:
+#     file: monitor/docker-compose.yml
+#     service: telegraf
+
+  unit:
+    extends:
+      file: unit/docker-compose.yml
+      service: server
+
+networks:
+  local:
+    external: true
+
+volumes:
+  unit_node_modules:
+    external: true

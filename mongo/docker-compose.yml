@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+
+  server:
+    container_name: mongo
+    image: mongo
+    labels:
+      container_group: mongo
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+      - local
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/mongo/db:/data/db
+
+  ui:
+    container_name: mongo-ui
+    image: mongo-express
+    labels:
+      container_group: mongo
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+      - local
+    ports:
+      - 8081:8081
+    restart: unless-stopped

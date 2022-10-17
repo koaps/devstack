@@ -1,0 +1,82 @@
+version: '3'
+services:
+
+  telegraf:
+    build: telegraf
+    container_name: telegraf
+    environment:
+    - INFLUX_ORG=${INFLUX_ORG:?err}
+    - INFLUX_TOKEN=${INFLUX_TOKEN:?err}
+    - INFLUX_URL=${INFLUX_URL:?err}
+    labels:
+      container_group: monitor
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    mem_limit: 1G
+    memswap_limit: 2G
+    mem_reservation: 512m
+    networks:
+    - local
+    restart: unless-stopped
+    volumes:
+    - /:/hostfs:ro
+    - /proc:/host/proc:ro
+    - /run/udev:/run/udev:ro
+    - /sys:/sys:ro
+    - /var/run:/var/run:ro
+
+  influxdb:
+    build: influxdb
+    container_name: influxdb
+    environment:
+    - INFLUXDB_DB=telegraf
+    - INFLUXDB_HTTP_AUTH_ENABLED=false
+    - INFLUXDB_HTTP_FLUX_ENABLED=true
+    - INFLUXDB_REPORTING_DISABLED=true
+    - INFLUXDB_HOST=127.0.0.1
+    - INFLUXDB_PASSWORD=influxdb
+    - INFLUXDB_USER=admin
+    labels:
+      container_group: monitor
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    mem_limit: 1G
+    memswap_limit: 2G
+    mem_reservation: 512m
+    networks:
+    - local
+    ports:
+    - 8086:8086
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/influxdbv2:/root/.influxdbv2
+
+  grafana:
+    build:
+      args:
+        DIR: monitor/grafana
+      context: ../
+      dockerfile: monitor/grafana/Dockerfile
+    container_name: grafana
+    environment:
+    - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel,devopsprodigy-kubegraf-app
+    - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASS:?err}
+    - GF_SECURITY_ADMIN_USER=admin
+    labels:
+      container_group: monitor
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    mem_limit: 1G
+    memswap_limit: 2G
+    mem_reservation: 512m
+    networks:
+    - local
+    ports:
+    - 3080:3080
+    restart: unless-stopped

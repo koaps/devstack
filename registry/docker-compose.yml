@@ -1,0 +1,31 @@
+version: '3'
+services:
+
+  server:
+    image: registry:latest
+    container_name: registry
+    labels:
+      container_group: registry
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+    - local
+    ports:
+    - 5000:5000
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/docker_registry:/var/lib/registry
+
+  ui:
+    image: joxit/docker-registry-ui:static
+    container_name: registry-ui
+    environment:
+      - REGISTRY_TITLE=Null Registry
+      - REGISTRY_URL=http://registry:5000
+    networks:
+    - local
+    ports:
+    - 5080:80
+    restart: unless-stopped

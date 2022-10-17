@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: wait for gogs to be ready
+      uri:
+        url: "http://{{ gogs_url }}/"
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 60
+      delay: 1
+
+    - name: check if user '{{ gogs_user }}' exists
+      uri:
+        url: "http://{{ gogs_url }}/api/v1/users/{{ gogs_user }}"
+        user: "{{ gogs_user }}"
+        password: "{{ gogs_pass }}"
+        force_basic_auth: true
+        status_code: [200,403,404]
+      register: user_result
+
+    - name: create user '{{ gogs_user }}'
+      shell: "docker exec gogs su -l git -c 'cd /app/gogs;./gogs admin create-user --name {{ gogs_user }} --password {{ gogs_pass }} --email {{ gogs_user }}@localhost --admin'"
+      when: user_result.status != 200

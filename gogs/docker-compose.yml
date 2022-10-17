@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+  server:
+    image: gogs/gogs:latest
+    container_name: gogs
+    environment:
+    - USER=git
+    labels:
+      container_group: gogs
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+    - local
+    ports:
+    - 3000:3000
+    - "3022:22"
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/gogs:/data
+    - ./conf/app.ini:/data/gogs/conf/app.ini:ro
+    - ./conf/app.ini:/app/gogs/custom/conf/app.ini:ro

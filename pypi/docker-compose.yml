@@ -1,0 +1,20 @@
+version: '3'
+services:
+
+  server:
+    command: -P . -a . --disable-fallback
+    container_name: pypi_server
+    image: pypiserver/pypiserver:latest
+    labels:
+      container_group: pypi
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+    - local
+    ports:
+    - 9000:8080
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/packages:/data/packages
