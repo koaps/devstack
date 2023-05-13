@@ -35,6 +35,9 @@ up:
 	@if [ -z "${vol}" ]; then echo -n "creating ${vol_name} volume: "; docker volume create ${vol_name}; fi
 	COMPOSE_HTTP_TIMEOUT=300 docker-compose -p ${name} up -d
 	ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gogs/setup.yml
+
+.PHONY: app_install
+app_install:
 	docker exec -ti -u unit -w /www/fapi_app unit /bin/bash -c "/usr/local/bin/python3 -m venv venv && source venv/bin/activate; pip3 install -r requirements.txt"
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install -g npm@latest"
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm link unit-http"

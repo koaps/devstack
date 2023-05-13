@@ -2,7 +2,7 @@ version: '3'
 services:
 
   server:
-    image: registry:latest
+    image: registry:2.7
     container_name: registry
     labels:
       container_group: registry
@@ -16,14 +16,17 @@ services:
     - 5000:5000
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/docker_registry:/var/lib/registry
+    - ${DEVSTACK_DIR:?err}:/var/lib/registry
+    - ./config.yml:/etc/docker/registry/config.yml:ro
 
   ui:
-    image: joxit/docker-registry-ui:static
+    image: joxit/docker-registry-ui:1.5-static
     container_name: registry-ui
     environment:
+      - DELETE_IMAGES=true
       - REGISTRY_TITLE=Null Registry
       - REGISTRY_URL=http://registry:5000
+      - SINGLE_REGISTRY=true
     networks:
     - local
     ports:
