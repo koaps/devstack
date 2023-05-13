@@ -23,7 +23,7 @@ clean:
 .PHONY: cleanup
 cleanup: down clean
 	@docker network rm local || true
-	sudo rm -rf /opt/devstack
+	sudo rm -rf /data/devstack
 
 .PHONY: down
 down:
@@ -57,7 +57,7 @@ app_restart_fapi:
 
 .PHONY: config
 config:
-	cp unit/config.json /opt/www/config.json
+	cp unit/config.json /data/www/config.json
 	docker exec -ti unit bash -c "curl -X PUT --data-binary @/www/config.json  \
     --unix-socket /var/run/control.unit.sock  \
     http://localhost/config; rm /www/config.json"

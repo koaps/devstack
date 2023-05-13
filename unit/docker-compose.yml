@@ -21,5 +21,5 @@ services:
     restart: unless-stopped
     volumes:
     - unit_node_modules:/usr/lib/node_modules
-    - /opt/www:/www
+    - /data/www:/www
     - $HOME/.pip/pip.conf:/etc/pip.conf:ro

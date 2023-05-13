@@ -76,10 +76,10 @@ services:
       file: registry/docker-compose.yml
       service: ui
 
-  selenium:
-    extends:
-      file: selenium/docker-compose.yml
-      service: server
+#  selenium:
+#   extends:
+#     file: selenium/docker-compose.yml
+#     service: server
 
 ### Uncomment to add monitoring
 # telegraf:
