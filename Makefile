@@ -36,6 +36,10 @@ up:
 	COMPOSE_HTTP_TIMEOUT=300 docker-compose -p ${name} up -d
 	ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gogs/setup.yml
 
+
+.PHONY: app
+app: app_install app_build app_config
+
 .PHONY: app_install
 app_install:
 	docker exec -ti -u unit -w /www/fapi_app unit /bin/bash -c "/usr/local/bin/python3 -m venv venv && source venv/bin/activate; pip3 install -r requirements.txt"
@@ -45,6 +49,14 @@ app_install:
 .PHONY: app_build
 app_build:
 	docker exec -ti -u unit -w /www/node_app unit bash -c "npm run build"
+
+.PHONY: app_config
+app_config:
+	cp unit/config.json /data/www/config.json
+	docker exec -ti unit bash -c "curl -X PUT --data-binary @/www/config.json  \
+    --unix-socket /var/run/control.unit.sock  \
+    http://localhost/config; rm /www/config.json"
+
 
 .PHONY: app_restart_node
 app_restart_node:
@@ -57,11 +69,3 @@ app_restart_fapi:
 	docker exec -ti unit curl -X GET \
     --unix-socket /var/run/control.unit.sock  \
     http://localhost/control/applications/fapi/restart
-
-.PHONY: config
-config:
-	cp unit/config.json /data/www/config.json
-	docker exec -ti unit bash -c "curl -X PUT --data-binary @/www/config.json  \
-    --unix-socket /var/run/control.unit.sock  \
-    http://localhost/config; rm /www/config.json"
-
