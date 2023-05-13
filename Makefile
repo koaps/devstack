@@ -42,8 +42,9 @@ app: app_install app_build app_config
 
 .PHONY: app_install
 app_install:
-	docker exec -ti -u unit -w /www/fapi_app unit /bin/bash -c "/usr/local/bin/python3 -m venv venv && source venv/bin/activate; pip3 install -r requirements.txt"
+	docker exec -ti -u unit -w /www/fapi_app unit /bin/bash -c "/usr/local/bin/python3 -m venv venv && source venv/bin/activate; pip3 install -U -r requirements.txt"
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install -g npm@latest"
+	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install"
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm link unit-http"
 
 .PHONY: app_build
