@@ -2,7 +2,8 @@ version: '3'
 services:
 
   server:
-    build: .
+    build: image/.
+    image: 172.16.16.1:5000/postgres:latest
     container_name: postgres
     labels:
       container_group: postgres
@@ -23,7 +24,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:?err}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS:?err}
       PGADMIN_DISABLE_POSTFIX: 1
     labels:
