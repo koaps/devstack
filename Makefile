@@ -29,6 +29,10 @@ cleanup: down clean
 down:
 	docker-compose -p ${name} down -v
 
+.PHONY: push
+push:
+	docker-compose push
+
 .PHONY: up
 up:
 	docker network inspect local >/dev/null 2>&1 && true || docker network create --subnet=172.16.16.0/24 local

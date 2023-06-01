@@ -28,6 +28,7 @@ $ cat >.env<<EOF
 DEVSTACK_DIR=/opt/devstack
 DRONE_DATABASE_DRIVER=postgres
 DRONE_DATABASE_SOURCE=postgres://drone:drone@postgres:5432/drone?sslmode=disable
+DRONE_GOGS_SERVER=http://gogs:3000
 DRONE_RPC_SECRET=derpy-derp-derp
 GOGS_ADMIN=gadmin
 GRAFANA_ADMIN_PASS=adm1n
