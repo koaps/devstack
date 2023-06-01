@@ -3,9 +3,9 @@ services:
 
   server:
     build: image/.
+    image: 172.16.16.1:5000/unit:latest
     container_name: unit
     hostname: unit
-    image: 172.16.16.1:5000/unit:latest
     labels:
       container_group: unit
     logging:
