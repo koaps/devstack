@@ -7,7 +7,7 @@ vol := $(shell docker volume ls -qf name=${vol_name})
 
 ## all target
 .PHONY: all
-all: build up clean
+all: build up clean app_config
 
 .PHONY: build
 build:
@@ -57,10 +57,8 @@ app_build:
 
 .PHONY: app_config
 app_config:
-	cp unit/config.json /opt/www/config.json
-	docker exec -ti unit bash -c "curl -X PUT --data-binary @/www/config.json  \
-    --unix-socket /var/run/control.unit.sock  \
-    http://localhost/config; rm /www/config.json"
+	docker exec -ti unit bash -c "curl -X PUT --data-binary @/docker-entrypoint.d/config.json  \
+    --unix-socket /var/run/control.unit.sock http://localhost/config"
 
 
 .PHONY: app_restart_node

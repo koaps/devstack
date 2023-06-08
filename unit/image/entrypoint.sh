@@ -63,7 +63,8 @@ if [ "$1" = "unitd" -o "$1" = "unitd-debug" ]; then
             echo "$0: Unit initial configuration complete; ready for start up..."
             echo
         else
-            echo "$0: /docker-entrypoint.d/ is empty, skipping initial configuration..."
+            echo "$0: /docker-entrypoint.d/ is empty, loading welcome configuration..."
+            cp /usr/share/unit/welcome/welcome.json /docker-entrypoint.d/config.json
         fi
     fi
 fi

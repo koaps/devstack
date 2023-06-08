@@ -4,8 +4,6 @@ ARG node_version=20
 ARG python_version=3.11.3
 ARG unit_version=1.30.0
 
-COPY entrypoint.sh /usr/local/bin/
-
 ENV LD_LIBRARY_PATH /usr/local/lib
 
 WORKDIR /root
@@ -117,6 +115,9 @@ RUN set -x \
 
 STOPSIGNAL SIGTERM
 
+VOLUME /docker-entrypoint.d/
+
+COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
