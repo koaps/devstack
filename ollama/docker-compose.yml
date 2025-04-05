@@ -1,0 +1,38 @@
+version: '3.6'
+services:
+
+  server:
+    container_name: ollama_server
+    image: ollama/ollama:latest
+    labels:
+      container_group: ollama
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+    - local
+    ports:
+    - 11434:11434
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/ollama:/root/.ollama
+
+  webui:
+    container_name: ollama_webui
+    image: ghcr.io/open-webui/open-webui:ollama
+    labels:
+      container_group: ollama
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+    - local
+    ports:
+    - 8888:8080
+    restart: unless-stopped
+    volumes:
+    - ${DEVSTACK_DIR:?err}/ollama:/root/.ollama
+    - ${DEVSTACK_DIR:?err}/open-webui:/app/backend/data
+

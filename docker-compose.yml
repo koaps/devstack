@@ -1,4 +1,5 @@
-version: '3'
+version: '3.6'
+
 services:
   drone-runner:
     depends_on:
@@ -22,30 +23,34 @@ services:
       file: gogs/docker-compose.yml
       service: server
 
-### Uncomment to add monitoring
-# grafana:
-#   depends_on:
-#     - influxdb
-#   extends:
-#     file: monitor/docker-compose.yml
-#     service: grafana
-#
-# influxdb:
-#   extends:
-#     file: monitor/docker-compose.yml
-#     service: influxdb
-#
-#  mongo:
-#    extends:
-#      file: mongo/docker-compose.yml
-#      service: server
-#
-#  mongo-ui:
-#    depends_on:
-#      - mongo
-#    extends:
-#      file: mongo/docker-compose.yml
-#      service: ui
+  grafana:
+    depends_on:
+      - influxdb
+    extends:
+      file: monitor/docker-compose.yml
+      service: grafana
+
+  influxdb:
+    extends:
+      file: monitor/docker-compose.yml
+      service: influxdb
+
+  mongo:
+    extends:
+      file: mongo/docker-compose.yml
+      service: server
+
+  mongo-ui:
+    depends_on:
+      - mongo
+    extends:
+      file: mongo/docker-compose.yml
+      service: ui
+
+  ollama:
+    extends:
+      file: ollama/docker-compose.yml
+      service: server
 
   pgadmin:
     depends_on:
@@ -76,18 +81,17 @@ services:
       file: registry/docker-compose.yml
       service: ui
 
-#  selenium:
-#   extends:
-#     file: selenium/docker-compose.yml
-#     service: server
+  selenium:
+    extends:
+      file: selenium/docker-compose.yml
+      service: server
 
-### Uncomment to add monitoring
-# telegraf:
-#   depends_on:
-#     - influxdb
-#   extends:
-#     file: monitor/docker-compose.yml
-#     service: telegraf
+  telegraf:
+    depends_on:
+     - influxdb
+    extends:
+      file: monitor/docker-compose.yml
+      service: telegraf
 
   unit:
     extends:
