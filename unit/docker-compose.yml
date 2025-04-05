@@ -20,6 +20,6 @@ services:
     - 9090:9090
     restart: unless-stopped
     volumes:
-    - unit_node_modules:/usr/lib/node_modules
-    - /opt/unit:/docker-entrypoint.d/
-    - /opt/www:/www
+    - ${DEVSTACK_DIR:?err}/unit_node_modules:/usr/lib/node_modules
+    - ${DEVSTACK_DIR:?err}/unit:/docker-entrypoint.d/
+    - ${DEVSTACK_DIR:?err}/www:/www

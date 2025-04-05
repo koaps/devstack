@@ -52,6 +52,11 @@ services:
       file: ollama/docker-compose.yml
       service: server
 
+  ollama-webui:
+    extends:
+      file: ollama/docker-compose.yml
+      service: webui
+
   pgadmin:
     depends_on:
       - postgres
