@@ -2,8 +2,14 @@ version: '3.6'
 services:
 
   server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:latest}
     container_name: ollama_server
-    image: ollama/ollama:latest
+    environment:
+    - OLLAMA_HOST=0.0.0.0:11434
     labels:
       container_group: ollama
     logging:
@@ -20,6 +26,10 @@ services:
 
   webui:
     container_name: ollama_webui
+    environment:
+    - OLLAMA_BASE_URL=http://ollama:11434
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
     image: ghcr.io/open-webui/open-webui:ollama
     labels:
       container_group: ollama
