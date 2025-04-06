@@ -82,5 +82,3 @@ services:
     ports:
     - 3080:3080
     restart: unless-stopped
-    volumes:
-    - ${DEVSTACK_DIR:?err}/grafana:/var/lib/grafana
