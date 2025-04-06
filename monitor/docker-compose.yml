@@ -65,6 +65,7 @@ services:
       dockerfile: monitor/grafana/Dockerfile
     container_name: grafana
     environment:
+    - GF_PATHS_HOME=/usr/share/grafana
     - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel
     - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASS:?err}
     - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:?err}

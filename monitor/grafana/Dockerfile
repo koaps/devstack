@@ -1,7 +1,9 @@
-FROM grafana/grafana
+FROM grafana/grafana-oss:main
 
 ARG DIR=.
 USER root
+
+RUN apk install gettext
 
 RUN rm -rf /var/lib/apt/lists/*
 

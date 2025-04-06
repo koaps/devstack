@@ -8,8 +8,21 @@ post() {
         "$url$2" 2> /dev/null
 }
 
+run() {
+  exec grafana-server                                         \
+    --homepath="$GF_PATHS_HOME"                               \
+    --config="$GF_PATHS_CONFIG"                               \
+    --packaging=docker                                        \
+    "$@"                                                      \
+    cfg:default.log.mode="console"                            \
+    cfg:default.paths.data="$GF_PATHS_DATA"                   \
+    cfg:default.paths.logs="$GF_PATHS_LOGS"                   \
+    cfg:default.paths.plugins="$GF_PATHS_PLUGINS"             \
+    cfg:default.paths.provisioning="$GF_PATHS_PROVISIONING"
+}
+
 if [ ! -f "/var/lib/grafana/.init" ]; then
-    exec /run.sh $@ &
+    run $@ &
 
     until curl -s "$url/api/datasources" 2> /dev/null; do
         sleep 1
@@ -24,4 +37,4 @@ if [ ! -f "/var/lib/grafana/.init" ]; then
     kill $(pidof grafana-server)
 fi
 
-exec /run.sh $@
+run
