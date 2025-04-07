@@ -3,9 +3,7 @@ FROM grafana/grafana-oss:main
 ARG DIR=.
 USER root
 
-RUN apk install gettext
-
-RUN rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache gettext
 
 WORKDIR /etc/grafana
 ADD ${DIR}/grafana.ini /etc/grafana
