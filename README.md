@@ -66,8 +66,8 @@ The DB password for gogs and drone is set via the initdb sql files, change them 
 
   docker-compose ps
 
-         Name                    Command                  State                                                              Ports
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         Name                    Command                  State                                                       Ports
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     drone_runner      /bin/drone-runner-docker         Up             0.0.0.0:8300->3000/tcp,:::8300->3000/tcp
     drone_server      /bin/drone-server                Up             0.0.0.0:8443->443/tcp,:::8443->443/tcp, 0.0.0.0:8000->80/tcp,:::8000->80/tcp
     gogs              /app/gogs/docker/start.sh  ...   Up (healthy)   0.0.0.0:3022->22/tcp,:::3022->22/tcp, 0.0.0.0:3000->3000/tcp,:::3000->3000/tcp
@@ -76,7 +76,7 @@ The DB password for gogs and drone is set via the initdb sql files, change them 
     mongo             docker-entrypoint.sh mongod      Up             0.0.0.0:27017->27017/tcp,:::27017->27017/tcp
     mongo-ui          /sbin/tini -- /docker-entr ...   Up             0.0.0.0:8081->8081/tcp,:::8081->8081/tcp
     ollama_server     /bin/ollama serve                Up             0.0.0.0:11434->11434/tcp,:::11434->11434/tcp
-    ollama_webui      bash start.sh                    Up (healthy)   0.0.0.0:8888->8080/tcp,:::8888->8080/tcp
+    ollama_webui      bash start.sh                    Up (healthy)   0.0.0.0:8080->8080/tcp,:::8080->8080/tcp
     pgadmin           /entrypoint.sh                   Up             443/tcp, 0.0.0.0:5050->80/tcp,:::5050->80/tcp
     postgres          /entrypoint.sh postgres          Up             0.0.0.0:5432->5432/tcp,:::5432->5432/tcp
     pypi_server       /entrypoint.sh                   Up             0.0.0.0:9000->8080/tcp,:::9000->8080/tcp
@@ -84,7 +84,7 @@ The DB password for gogs and drone is set via the initdb sql files, change them 
     registry-ui       /docker-entrypoint.sh ngin ...   Up             0.0.0.0:5080->80/tcp,:::5080->80/tcp
     selenium_server   /opt/bin/entry_point.sh          Up             0.0.0.0:4444->4444/tcp,:::4444->4444/tcp, 5900/tcp, 0.0.0.0:7900->7900/tcp,:::7900->7900/tcp, 9000/tcp
     telegraf          /entrypoint.sh telegraf          Up             8092/udp, 8094/tcp, 8125/udp
-    unit              /usr/local/bin/entrypoint. ...   Up             0.0.0.0:80->80/tcp,:::80->80/tcp, 0.0.0.0:8080->8080/tcp,:::8080->8080/tcp, 0.0.0.0:9090->9090/tcp,:::9090->9090/tcp
+    unit              /usr/local/bin/docker-entr ...   Up             0.0.0.0:80->80/tcp,:::80->80/tcp, 0.0.0.0:9080->9080/tcp,:::9080->9080/tcp
   ```
 
 ### To stop the devstack
@@ -117,9 +117,6 @@ The DB password for gogs and drone is set via the initdb sql files, change them 
 * Restart Unit Apps (as needed)
   The unit apps will need to be restarted if using a mount and the code is changed on disk.
   ```
-  # nodejs
-  $ make app_restart_node
-
   # fastapi
   $ make app_restart_fapi
   ```
@@ -175,6 +172,9 @@ http://${SERVER_IP}:5080/
 # Drone Server - CICD, you need to enable and trust repos for them to build
 http://${SERVER_IP}:8000/
 
+# Ollama WebUI
+http://${SERVER_IP}:8080/
+
 # MongoDB Express UI (default login admin:pass)
 http://${SERVER_IP}:8081/
 
@@ -184,13 +184,7 @@ http://${SERVER_IP}:8086/
 # PIP Packages
 http://${SERVER_IP}:9000/packages/
 
-# Unit Server (express)
+# Unit Server (fapi)
 http://${SERVER_IP}:9080/
-
-# Unit Server (fastapi)
-http://${SERVER_IP}:9090/
-
-# Ollama WebUI
-http://${SERVER_IP}:8888/
 EOC
 ```

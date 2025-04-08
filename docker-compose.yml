@@ -106,7 +106,3 @@ services:
 networks:
   local:
     external: true
-
-volumes:
-  unit_node_modules:
-    external: true

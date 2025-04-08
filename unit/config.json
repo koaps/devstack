@@ -3,33 +3,17 @@
         "*:80": {
             "pass": "routes"
         },
-        "*:8080": {
-            "pass": "applications/node"
-        },
-        "*:9090": {
+        "*:9080": {
             "pass": "applications/fapi"
         }
     },
     "applications": {
         "fapi": {
-            "type": "python 3.10",
+            "type": "python 3.12",
             "path": "/www/fapi_app/",
             "home": "/www/fapi_app/venv/",
             "module": "asgi",
             "callable": "app"
-        },
-        "node": {
-            "type": "external",
-            "working_directory": "/www/node_app",
-            "executable": "/usr/bin/env",
-            "arguments": [
-                "node",
-                "--loader",
-                "unit-http/loader.mjs",
-                "--require",
-                "unit-http/loader",
-                "server.js"
-            ]
         }
     },
     "routes": [
