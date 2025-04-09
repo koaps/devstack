@@ -2,7 +2,8 @@ version: "3.6"
 services:
 
   server:
-    image: unit:1.34.2-python3.12
+    build: image/.
+    image: 172.16.16.1:5000/unit:latest
     container_name: unit
     hostname: unit
     labels:
@@ -18,5 +19,8 @@ services:
     - 9080:9080
     restart: unless-stopped
     volumes:
-    - ./config.json:/docker-entrypoint.d/config.json
-    - ${DEVSTACK_DIR:?err}/unit/www:/www
+    - ./index.html:/www/static/index.html
+    - ./requirements.txt:/www/requirements.txt
+    - ${DEVSTACK_DIR:?err}/unit/config:/docker-entrypoint.d
+    - ${DEVSTACK_DIR:?err}/unit/node_modules:/usr/lib/node_modules
+    - ${DEVSTACK_DIR:?err}/www:/www

@@ -2,7 +2,7 @@ version: '3'
 services:
 
   server:
-    image: registry:2.7
+    image: registry
     container_name: registry
     labels:
       container_group: registry
@@ -16,11 +16,11 @@ services:
     - 5000:5000
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}:/var/lib/registry
     - ./config.yml:/etc/docker/registry/config.yml:ro
+    - ${DEVSTACK_DIR:?err}:/var/lib/registry
 
   ui:
-    image: joxit/docker-registry-ui:1.5-static
+    image: joxit/docker-registry-ui
     container_name: registry-ui
     environment:
       - DELETE_IMAGES=true

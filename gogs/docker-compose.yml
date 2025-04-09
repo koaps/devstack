@@ -2,7 +2,7 @@ version: '3'
 services:
 
   server:
-    image: gogs/gogs:latest
+    image: gogs/gogs
     container_name: gogs
     environment:
     - USER=git
