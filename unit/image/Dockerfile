@@ -37,10 +37,9 @@ RUN set -x \
     && curl -fsSL https://deb.nodesource.com/setup_${node_version}.x | bash - \
     && apt-get update \
     && apt-get install -y nodejs \
-    && mkdir -p /opt/node_modules\
-    && npm install --prefix /opt/node_modules pnpm@latest -g \
-    && npm install --prefix /opt/node_modules npm@latest -g \
-    && npm install --prefix /opt/node_modules node-gyp -g \
+    && npm install -g pnpm@latest \
+    && npm install -g npm@latest \
+    && npm install -g node-gyp \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && rm -f /requirements.apt \
     && ln -sf /dev/stdout /var/log/unit.log
@@ -90,12 +89,12 @@ RUN set -ex \
     && install -pm755 build/sbin/unitd /usr/sbin/unitd \
     && make clean \
     && ./configure $CONFIGURE_ARGS_MODULES --cc-opt="$CC_OPT" --modulesdir=/usr/lib/unit/debug-modules --debug \
-    && ./configure nodejs --node-gyp=/opt/node_modules/npm/bin/node-gyp-bin/node-gyp \
+    && ./configure nodejs --node-gyp=/usr/lib/node_modules/npm/bin/node-gyp-bin/node-gyp \
     && ./configure python --module=python3 --config=/usr/local/bin/python${python_release}-config \
     && make -j $NCPU libunit-install node node-install python3-install \
     && make clean \
     && ./configure $CONFIGURE_ARGS_MODULES --cc-opt="$CC_OPT" --modulesdir=/usr/lib/unit/modules \
-    && ./configure nodejs --node-gyp=/opt/node_modules/npm/bin/node-gyp-bin/node-gyp \
+    && ./configure nodejs --node-gyp=/usr/lib/node_modules/npm/bin/node-gyp-bin/node-gyp \
     && ./configure python --module=python3 --config=/usr/local/bin/python${python_release}-config \
     && make -j $NCPU node node-install libunit-install python3-install
 
@@ -106,7 +105,9 @@ COPY --from=builder /usr/sbin/unitd-debug /usr/sbin/unitd-debug
 COPY --from=builder /usr/lib/unit/ /usr/lib/unit/
 COPY --from=builder /usr/lib/*-linux-gnu/libunit.a /tmp/
 COPY --from=builder /usr/include/nxt_* /usr/include/
-COPY --from=builder /opt/node_modules/unit-http/ /opt/node_modules/unit-http/
+COPY --from=builder /usr/lib/node_modules/unit-http/ /usr/lib/node_modules/unit-http/
+
+RUN ln -s /usr/lib/node_modules/npm /usr/lib/unit/modules/npm
 
 RUN set -x \
    && mkdir -p /usr/share/unit/welcome/ \

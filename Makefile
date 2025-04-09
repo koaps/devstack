@@ -74,5 +74,5 @@ app_restart_fapi:
 	http://localhost/control/applications/fapi/restart
 
 .PHONY: app_get_config
-get_config:
+app_get_config:
 	docker exec -ti unit bash -c "curl --unix-socket /var/run/control.unit.sock http://localhost/config"

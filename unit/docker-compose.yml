@@ -22,5 +22,4 @@ services:
     - ./index.html:/www/static/index.html
     - ./requirements.txt:/www/requirements.txt
     - ${DEVSTACK_DIR:?err}/unit/config:/docker-entrypoint.d
-    - ${DEVSTACK_DIR:?err}/unit/node_modules:/usr/lib/node_modules
     - ${DEVSTACK_DIR:?err}/www:/www
