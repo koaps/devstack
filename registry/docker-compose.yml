@@ -1,9 +1,14 @@
-version: '3'
+version: '3.8'
 services:
 
   server:
-    image: registry
+    image: registry:latest
     container_name: registry
+    environment:
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin=['*']
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods=['HEAD','GET','OPTIONS']
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Headers=['Accept','Cache-Control']
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
     labels:
       container_group: registry
     logging:
@@ -16,17 +21,23 @@ services:
     - 5000:5000
     restart: unless-stopped
     volumes:
-    - ./config.yml:/etc/docker/registry/config.yml:ro
-    - ${DEVSTACK_DIR:?err}:/var/lib/registry
+    - ${DEVSTACK_DIR:?err}/registry:/var/lib/registry
 
   ui:
-    image: joxit/docker-registry-ui
+    image: joxit/docker-registry-ui:main
     container_name: registry-ui
     environment:
-      - DELETE_IMAGES=true
+      - NGINX_PROXY_PASS_URL=http://registry:5000
       - REGISTRY_TITLE=Null Registry
-      - REGISTRY_URL=http://registry:5000
+      - REGISTRY_SECURED=false
       - SINGLE_REGISTRY=true
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - CATALOG_ELEMENTS_LIMIT=1000
+      - TAGLIST_PAGE_SIZE=100
     networks:
     - local
     ports:
