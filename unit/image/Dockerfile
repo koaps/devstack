@@ -55,6 +55,7 @@ RUN set -x \
     && ln -sf /usr/local/bin/pip${python_release} /usr/local/bin/pip3 \
     && ln -s /usr/local/lib/libpython${python_release}.so.1.0 /lib/x86_64-linux-gnu/. \
     && /usr/local/bin/pip3 install -U pip \
+    && /usr/local/bin/pip3 install -U asgiref uvicorn \
     && cd && rm -rf Python-${python_version} Python-${python_version}.tar
 
 FROM base AS builder

@@ -46,6 +46,7 @@ services:
     - DRONE_SERVER_PROTO=http
     - DRONE_TLS_AUTOCERT=false
     - DRONE_USER_CREATE=username:${GOGS_ADMIN:?err},admin:true
+    - DRONE_COOKIE_SECRET=correct-horse-battery-staple
     labels:
       container_group: drone
     logging:
@@ -62,4 +63,4 @@ services:
     - 8443:443
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/drone:/data
+    - ${DEVSTACK_DIR:?err}/drone:/var/lib/drone/

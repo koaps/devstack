@@ -12,7 +12,7 @@
     },
     "applications": {
         "fapi": {
-            "type": "python 3.12",
+            "type": "python 3.13",
             "path": "/www/fapi_app/",
             "home": "/www/fapi_app/venv/",
             "module": "asgi",

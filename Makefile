@@ -72,8 +72,8 @@ app_install_fapi:
 
 .PHONY: app_install_node
 app_install_node:
-	sudo cp unit/package.json /home/${name}/www/node_app/
 	docker exec -ti -w /www unit /bin/bash -c "if [ ! -d node_app ]; then mkdir node_app && chown unit node_app; fi"
+	sudo cp unit/package.json /home/${name}/www/node_app/
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install -g npm@latest"
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install"
 	docker exec -ti -w /www/node_app unit /bin/bash -c "npm link unit-http"
