@@ -1,2 +1,3 @@
 fastapi[all]
 clientai[ollama]
+uvicorn

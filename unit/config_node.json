@@ -1,0 +1,32 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "routes"
+        },
+        "*:9080": {
+            "pass": "applications/node"
+        }
+    },
+    "applications": {
+        "node": {
+            "type": "external",
+            "working_directory": "/www/node_app",
+            "executable": "/usr/bin/env",
+            "arguments": [
+                "node",
+                "--loader",
+                "unit-http/loader.mjs",
+                "--require",
+                "unit-http/loader",
+                "server.js"
+            ]
+        }
+    },
+    "routes": [
+        {
+            "action": {
+                "share": "/www/static/$uri"
+            }
+        }
+    ]
+}

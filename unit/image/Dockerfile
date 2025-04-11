@@ -1,8 +1,8 @@
 FROM debian:12-slim AS base
 
 ARG node_version=23
-ARG python_release=3.12
-ARG python_version=3.12.9
+ARG python_release=3.13
+ARG python_version=3.13.2
 ARG unit_version=1.34.2
 
 ENV LD_LIBRARY_PATH=/usr/local/lib
