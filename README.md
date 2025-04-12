@@ -150,6 +150,8 @@ trusted-host=172.16.16.1
 ```
 This is the internal gateway IP of the docker server, it should work fine for anything in the devstack network.
 
+Just note that any updates to the packages on disk (mirroring) requires the pypi-server to be restarted.
+
 ### Service URLs
 ```
 $ export SERVER_IP=X.X.X.X
