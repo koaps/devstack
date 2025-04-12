@@ -1,4 +1,4 @@
-asgiref
-fastapi[all]
 clientai[ollama]
-uvicorn
+fastapi[all]
+textual
+textual-dev

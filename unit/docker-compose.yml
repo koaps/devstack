@@ -17,6 +17,7 @@ services:
     ports:
     - 80:80
     - 9080:9080
+    - 9090:9090
     restart: unless-stopped
     volumes:
     - ${DEVSTACK_DIR:?err}/unit/config:/docker-entrypoint.d

@@ -38,16 +38,11 @@ up:
 
 
 .PHONY: app
-app: app_install app_build app_config
-
-.PHONY: app_build
-app_build:
-	docker exec -ti -u unit -w /www/node_app unit bash -c "npm run build"
+app: app_install app_config
 
 .PHONY: app_clean
 app_clean:
 	docker exec -ti -w /www unit /bin/bash -c "if [ -d fapi_app ]; then rm -rf fapi_app; fi"
-	docker exec -ti -w /www unit /bin/bash -c "if [ -d node_app ]; then rm -rf node_app; fi"
 
 .PHONY: app_config
 app_config:
@@ -55,28 +50,21 @@ app_config:
 	docker exec -ti unit bash -c "curl -X PUT --data-binary @/docker-entrypoint.d/config.json  \
 	--unix-socket /var/run/control.unit.sock http://localhost/config"
 
-.PHONY: app_config_fapi
-app_config_fapi:
-	sudo cp unit/config_fapi.json /home/${name}/unit/config/config.json
+.PHONY: app_config_static
+app_config_static:
+	sudo cp unit/config_static.json /home/${name}/unit/config/config.json
 	docker exec -ti unit bash -c "curl -X PUT --data-binary @/docker-entrypoint.d/config.json  \
 	--unix-socket /var/run/control.unit.sock http://localhost/config"
 
 .PHONY: app_install
-app_install: app_install_fapi app_install_node app_install_static
+app_install: app_install_fapi app_install_static
 
 .PHONY: app_install_fapi
 app_install_fapi:
 	sudo cp unit/requirements.txt /home/${name}/www/
 	docker exec -ti -w /www unit /bin/bash -c "if [ ! -d fapi_app ]; then mkdir fapi_app && chown unit fapi_app; fi"
+	if [ ! -f /home/${name}/www/fapi_app/asgi.py ]; then cp unit/asgi.py /home/${name}/www/fapi_app/. ; fi
 	docker exec -ti -u unit -w /www/fapi_app unit /bin/bash -c "/usr/local/bin/python3 -m venv venv && source venv/bin/activate; pip3 install -U pip; pip3 install -U -r /www/requirements.txt"
-
-.PHONY: app_install_node
-app_install_node:
-	docker exec -ti -w /www unit /bin/bash -c "if [ ! -d node_app ]; then mkdir node_app && chown unit node_app; fi"
-	sudo cp unit/package.json /home/${name}/www/node_app/
-	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install -g npm@latest"
-	docker exec -ti -w /www/node_app unit /bin/bash -c "npm install"
-	docker exec -ti -w /www/node_app unit /bin/bash -c "npm link unit-http"
 
 .PHONY: app_install_static
 app_install_static:
@@ -89,6 +77,6 @@ app_restart_fapi:
 	--unix-socket /var/run/control.unit.sock  \
 	http://localhost/control/applications/fapi/restart
 
-.PHONY: app_get_config
+.PHONY: app_config_get
 app_get_config:
 	docker exec -ti unit bash -c "curl --unix-socket /var/run/control.unit.sock http://localhost/config"
