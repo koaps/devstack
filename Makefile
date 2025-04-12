@@ -82,3 +82,8 @@ app_restart_fapi:
 app_get_config:
 	docker exec -ti unit bash -c "curl --unix-socket /var/run/control.unit.sock http://localhost/config"
 
+.PHONY: models_pull
+app_get_config:
+	docker exec -it ollama_server ollama pull llama3.2:latest
+	docker exec -it ollama_server ollama pull 0xroyce/NazareAI-Python-Programmer-3B
+
