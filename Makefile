@@ -43,6 +43,7 @@ app: app_install app_config
 .PHONY: app_clean
 app_clean:
 	docker exec -ti -w /www unit /bin/bash -c "if [ -d fapi_app ]; then rm -rf fapi_app; fi"
+	docker exec -ti -w /www unit /bin/bash -c "if [ -d static ]; then rm -rf static; fi"
 
 .PHONY: app_config
 app_config:
@@ -68,9 +69,8 @@ app_install_fapi:
 
 .PHONY: app_install_static
 app_install_static:
-	docker exec -ti -w /www unit /bin/bash -c "if [ ! -d static ]; then mkdir static; fi"
-	sudo cp unit/index.html /home/${name}/www/static/
-	docker exec -ti -w /www unit /bin/bash -c "chown -R unit static"
+	docker exec -ti -w /www unit /bin/bash -c "if [ ! -d static ]; then mkdir static; chown unit static; fi"
+	docker exec -ti -u unit -w /www unit /bin/bash -c "cat /opt/index.html | envsubst >/www/static/index.html"
 
 .PHONY: app_restart_fapi
 app_restart_fapi:
@@ -81,3 +81,4 @@ app_restart_fapi:
 .PHONY: app_config_get
 app_get_config:
 	docker exec -ti unit bash -c "curl --unix-socket /var/run/control.unit.sock http://localhost/config"
+

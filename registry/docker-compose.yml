@@ -9,6 +9,7 @@ services:
       - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods=['HEAD','GET','OPTIONS']
       - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Headers=['Accept','Cache-Control']
       - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - OTEL_TRACES_EXPORTER=none 
     labels:
       container_group: registry
     logging:

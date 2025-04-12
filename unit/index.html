@@ -2,8 +2,18 @@
 <html>
   <head><title>Static Test Page</title></head>
   <body bgcolor=black text=white>
-    <h1><center>
-    [&nbsp;&nbsp;&#8333;&#5154;&#8226;(&#1835;)&#8226;&#5154;&#8334;&nbsp;&nbsp;]
-    </center></h1>
+    <center>
+	<h1>[&nbsp;&nbsp;&#8333;&#5154;&#8226;(&#1835;)&#8226;&#5154;&#8334;&nbsp;&nbsp;]</h1>
+	<a href="http://${NGINX_HOST}:8080/"=>Ollama WebUI</a></br>
+	<a href="http://${NGINX_HOST}:3000/"=>Gogs UI</a></br>
+	<a href="http://${NGINX_HOST}:8000/"=>Drone Server</a></br>
+	<a href="http://${NGINX_HOST}:9080/">Unit Server (fapi)</a></br>
+	<a href="http://${NGINX_HOST}:4444/"=>Selenium Server</a></br>
+	<a href="http://${NGINX_HOST}:5080/"=>Docker Registry</a></br>
+	<a href="http://${NGINX_HOST}:9000/packages/">PIP Packages</a></br>
+	<a href="http://${NGINX_HOST}:5050/"=>Postgres Admin UI</a></br>
+	<a href="http://${NGINX_HOST}:8086/">Influxdb Admin UI</a></br>
+	<a href="http://${NGINX_HOST}:8081/"=>MongoDB Express UI (default login admin:pass)</a></br>
+    </center>
   </body>
 </html>

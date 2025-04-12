@@ -30,7 +30,7 @@ RUN set -x \
     && /usr/sbin/update-locale LANG=C.UTF-8 \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen \
-    && apt install -y apt-utils build-essential ca-certificates curl git gpg golang \
+    && apt install -y apt-utils build-essential ca-certificates curl git gpg golang gettext-base \
        libbz2-dev libc6-dev libffi-dev libgdbm-dev libncursesw5-dev libpcre2-dev \
        libreadline-dev libsqlite3-dev libssl-dev libnss3-dev mercurial tk-dev wget zlib1g-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
