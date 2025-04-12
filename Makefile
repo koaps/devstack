@@ -70,6 +70,7 @@ app_install_fapi:
 app_install_static:
 	docker exec -ti -w /www unit /bin/bash -c "if [ ! -d static ]; then mkdir static; fi"
 	sudo cp unit/index.html /home/${name}/www/static/
+	docker exec -ti -w /www unit /bin/bash -c "chown -R unit static"
 
 .PHONY: app_restart_fapi
 app_restart_fapi:
