@@ -1,10 +1,17 @@
 {
-  "name": "InfluxDB",
+  "name": "InfluxDB v2",
   "type": "influxdb",
-  "url": "http://$INFLUX_HOST:8086",
-  "access": "proxy",
-  "user": "$INFLUX_USER",
-  "password": "$INFLUX_PASSWORD",
-  "database": "$INFLUX_DB",
-  "basicAuth": false
+  "url": "http://$INFLUX_DB_HOST:8086",
+  "user": "",
+  "database": "",
+  "token": "$INFLUX_DB_TOKEN",
+  "database": "$INFLUX_DB_BUCKET",
+  "basicAuth": false,
+  "isDefault": true,
+  "jsonData": {
+    "defaultBucket": "telegraf",
+    "httpMode": "POST",
+    "organization": "null",
+    "version": "Flux"
+  }
 }

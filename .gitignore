@@ -179,3 +179,5 @@ npm-debug.log
 # Emacs
 *~
 .eslintcache
+
+.token

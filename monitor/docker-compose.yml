@@ -5,9 +5,9 @@ services:
     build: telegraf
     container_name: telegraf
     environment:
-    - INFLUX_BUCKET=${INFLUX_BUCKET:?err}
-    - INFLUX_ORG=${INFLUX_ORG:?err}
-    - INFLUX_TOKEN=${INFLUX_TOKEN:?err}
+    - INFLUX_DB_BUCKET=${INFLUX_DB_BUCKET:?err}
+    - INFLUX_DB_ORG=${INFLUX_DB_ORG:?err}
+    - INFLUX_DB_TOKEN=${INFLUX_DB_TOKEN:?err}
     - HOST_ETC=/hostfs/etc
     - HOST_PROC=/hostfs/proc
     - HOST_SYS=/hostfs/sys
@@ -30,16 +30,15 @@ services:
     - /:/hostfs:ro
 
   influxdb:
-    build: influxdb
+    image: influxdb:2
     container_name: influxdb
     environment:
-    - INFLUXDB_DB=${INFLUXDB_DB:?err}
-    - INFLUXDB_HTTP_AUTH_ENABLED=false
-    - INFLUXDB_HTTP_FLUX_ENABLED=true
-    - INFLUXDB_REPORTING_DISABLED=true
-    - INFLUXDB_HOST=127.0.0.1
-    - INFLUXDB_PASSWORD=${INFLUXDB_PASSWORD:?err}
-    - INFLUXDB_USER=${INFLUXDB_USER:?err}
+    - DOCKER_INFLUXDB_INIT_MODE=setup
+    - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_DB_USER:?err}
+    - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_DB_PASSWORD:?err}
+    - DOCKER_INFLUXDB_INIT_ORG=${INFLUX_DB_ORG:?err}
+    - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_DB_BUCKET:?err}
+    - INFLUXD_REPORTING_DISABLED=true
     labels:
       container_group: monitor
     logging:
@@ -55,7 +54,9 @@ services:
     - 8086:8086
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/influxdbv2:/root/.influxdbv2
+    - ${DEVSTACK_DIR:?err}/influxdb/root:/root/.influxdbv2
+    - ${DEVSTACK_DIR:?err}/influxdb/data:/influxdb2
+    - ${DEVSTACK_DIR:?err}/influxdb/config:/etc/influxdb2
 
   grafana:
     build:
