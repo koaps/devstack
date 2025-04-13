@@ -14,10 +14,6 @@ You can re-run make fairly safely to push updates and changes since it uses exte
 
 **Note: I'm running this on a 12core Debian machine with 32G ram and ZFS docker volumes, docker eats a lot of memory running the monitoring stack, so comment it out if the overhead is too much, the influxdb and telegraf settings might need to be tweaked for better performance and feel free to PR any improvements you find.**
 
-First create an influxdb token, see [here](https://docs.influxdata.com/influxdb/cloud/reference/cli/influx/auth/create/)
-
-Also change the InfluxDB Org name below if you want.
-
 ### Create the `.env` file:
 Replace `<YOUR_SERVER_IP>` with the ip of your docker server
 
@@ -33,8 +29,11 @@ DRONE_RPC_SECRET=derpy-derp-derp
 GOGS_ADMIN=gadmin
 GRAFANA_ADMIN_PASS=adm1n
 GRAFANA_ADMIN_USER=admin
-INFLUX_ORG=null
-INFLUX_TOKEN=<TOKEN_FROM_INFLUX>
+INFLUX_DB_BUCKET=telegraf
+INFLUX_DB_ORG=null
+INFLUX_DB_TOKEN=<Created Token>
+INFLUX_DB_PASSWORD=influxdb
+INFLUX_DB_USER=admin
 INFLUX_URL=http://${SERVER_IP}:8086
 INFLUXDB_DB=telegraf
 INFLUXDB_PASSWORD=influxdb
@@ -91,6 +90,20 @@ The DB password for gogs and drone is set via the initdb sql files, change them 
 * Just run make down
   ```
   make down
+  ```
+
+### To create a token for grafana and telegraf
+* Create an api token
+  ```
+  docker exec -it influxdb influx auth create --org null --all-access -d apitoken
+  ```
+
+* Update .env file INFLUX_DB_TOKEN value
+
+* Rebuild grafana and telegraf
+  ```
+  ./rebuild_service.sh grafana
+  ./rebuild_service.sh telegraf
   ```
 
 ### To install the nginx-unit apps
