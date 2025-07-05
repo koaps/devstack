@@ -11,7 +11,9 @@ PASSWD   = gogs
 SSL_MODE = disable
 
 [repository]
-ROOT = /data/git/gogs-repositories
+ROOT          = /data/git/gogs-repositories
+FILE_MAX_SIZE = 1024
+MAX_FILES     = 10
 
 [server]
 DOMAIN           = {{ gogs_domain }}
