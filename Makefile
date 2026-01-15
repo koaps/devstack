@@ -9,7 +9,7 @@ all: build up clean app
 .PHONY: build
 build:
 	ansible -e '@.vars.yml' -m template -a "src=gogs/app.ini.j2 dest=gogs/conf/app.ini" localhost
-	docker-compose build --pull
+	docker compose build --pull
 
 ## clean target
 .PHONY: clean
@@ -24,16 +24,16 @@ cleanup: down clean
 
 .PHONY: down
 down:
-	docker-compose -p ${name} down -v
+	docker compose -p ${name} down -v
 
 .PHONY: push
 push:
-	docker-compose push
+	docker compose push
 
 .PHONY: up
 up:
 	docker network inspect local >/dev/null 2>&1 && true || docker network create --subnet=172.16.16.0/24 local
-	COMPOSE_HTTP_TIMEOUT=300 docker-compose -p ${name} up -d
+	COMPOSE_HTTP_TIMEOUT=300 docker compose -p ${name} up -d
 	ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gogs/setup.yml
 
 

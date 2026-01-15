@@ -1,5 +1,3 @@
-version: '3.6'
-
 services:
   drone-runner:
     depends_on:
@@ -35,17 +33,17 @@ services:
       file: monitor/docker-compose.yml
       service: influxdb
 
-  mongo:
-    extends:
-      file: mongo/docker-compose.yml
-      service: server
+#  mongo:
+#    extends:
+#      file: mongo/docker-compose.yml
+#      service: server
 
-  mongo-ui:
-    depends_on:
-      - mongo
-    extends:
-      file: mongo/docker-compose.yml
-      service: ui
+#  mongo-ui:
+#    depends_on:
+#      - mongo
+#    extends:
+#      file: mongo/docker-compose.yml
+#      service: ui
 
   ollama:
     extends:
@@ -86,10 +84,10 @@ services:
       file: registry/docker-compose.yml
       service: ui
 
-  selenium:
-    extends:
-      file: selenium/docker-compose.yml
-      service: server
+#  selenium:
+#    extends:
+#      file: selenium/docker-compose.yml
+#      service: server
 
   telegraf:
     depends_on:

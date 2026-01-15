@@ -12,6 +12,8 @@ SSL_MODE = disable
 
 [repository]
 ROOT          = /data/git/gogs-repositories
+
+[repository.upload]
 FILE_MAX_SIZE = 1024
 MAX_FILES     = 10
 
@@ -23,10 +25,6 @@ DISABLE_SSH      = false
 SSH_PORT         = 3022
 START_SSH_SERVER = true
 OFFLINE_MODE     = true
-LANDING_PAGE     = explore
-
-[mailer]
-ENABLED = false
 
 [service]
 REGISTER_EMAIL_CONFIRM = false

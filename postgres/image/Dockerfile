@@ -1,6 +1,6 @@
 FROM alpine
 
-ARG gosu_version=1.12
+ARG gosu_version=1.19
 
 RUN apk update && apk add curl postgresql && \
     mkdir /initdb.d && \
