@@ -13,8 +13,8 @@ services:
     - DRONE_RPC_DUMP_HTTP_BODY=false
     - DRONE_RUNNER_CAPACITY=2
     - DRONE_RUNNER_NAME=drone_runner
-    - DRONE_UI_USERNAME=admin
-    - DRONE_UI_PASSWORD=adm1n
+    - DRONE_UI_USERNAME=${DRONE_UI_USERNAME:?err}
+    - DRONE_UI_PASSWORD=${DRONE_UI_PASSWORD:?err}
     labels:
       container_group: drone
     logging:
@@ -50,7 +50,7 @@ services:
     - DRONE_SERVER_PROTO=http
     - DRONE_TLS_AUTOCERT=false
     - DRONE_USER_CREATE=username:${GOGS_ADMIN:?err},admin:true
-    - DRONE_COOKIE_SECRET=correct-horse-battery-staple
+    - DRONE_COOKIE_SECRET=${DRONE_COOKIE_SECRET:?err}
     labels:
       container_group: drone
     logging:
