@@ -33,27 +33,39 @@ services:
       file: monitor/docker-compose.yml
       service: influxdb
 
-#  mongo:
-#    extends:
-#      file: mongo/docker-compose.yml
-#      service: server
+  ldap:
+    extends:
+      file: ldap/docker-compose.yml
+      service: server
 
-#  mongo-ui:
-#    depends_on:
-#      - mongo
-#    extends:
-#      file: mongo/docker-compose.yml
-#      service: ui
+  ldap-ui:
+    depends_on:
+      - ldap
+    extends:
+      file: ldap/docker-compose.yml
+      service: ui
 
-#  ollama:
-#    extends:
-#      file: ollama/docker-compose.yml
-#      service: server
+  #  mongo:
+  #    extends:
+  #      file: mongo/docker-compose.yml
+  #      service: server
 
-#  ollama-webui:
-#    extends:
-#      file: ollama/docker-compose.yml
-#      service: webui
+  #  mongo-ui:
+  #    depends_on:
+  #      - mongo
+  #    extends:
+  #      file: mongo/docker-compose.yml
+  #      service: ui
+
+  #  ollama:
+  #    extends:
+  #      file: ollama/docker-compose.yml
+  #      service: server
+
+  #  ollama-webui:
+  #    extends:
+  #      file: ollama/docker-compose.yml
+  #      service: webui
 
   pgadmin:
     depends_on:
@@ -84,14 +96,14 @@ services:
       file: registry/docker-compose.yml
       service: ui
 
-#  selenium:
-#    extends:
-#      file: selenium/docker-compose.yml
-#      service: server
+  #  selenium:
+  #    extends:
+  #      file: selenium/docker-compose.yml
+  #      service: server
 
   telegraf:
     depends_on:
-     - influxdb
+      - influxdb
     extends:
       file: monitor/docker-compose.yml
       service: telegraf
