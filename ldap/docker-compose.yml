@@ -1,7 +1,8 @@
 services:
   server:
-    image: bitnami/openldap:latest
-    container_name: ldap
+    build: image/.
+    image: 172.16.16.1:5000/openldap:latest
+    container_name: openldap
     environment:
       - LDAP_ADMIN_USERNAME=${LDAP_ADMIN_USERNAME:?err}
       - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD:?err}
@@ -28,7 +29,10 @@ services:
     image: dnknth/ldap-ui
     container_name: ldap-ui
     environment:
-      - LDAP_URL: "${LDAP_URL:-ldap://ldap/}"
+      - LDAP_URL=ldap://openldap:1389
+      - BASE_DN=${LDAP_ROOT:?err}
+      - BIND_DN=${LDAP_ADMIN_DN:?err}
+      - BIND_PASSWORD=${LDAP_ADMIN_PASSWORD:?err}
     labels:
       container_group: ldap
     logging:
@@ -38,5 +42,5 @@ services:
     networks:
       - local
     ports:
-      - 5000:5000
+      - 5500:5000
     restart: unless-stopped
