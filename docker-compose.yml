@@ -33,39 +33,39 @@ services:
       file: monitor/docker-compose.yml
       service: influxdb
 
-  ldap:
-    extends:
-      file: ldap/docker-compose.yml
-      service: server
+#  ldap:
+#    extends:
+#      file: ldap/docker-compose.yml
+#      service: server
 
-  ldap-ui:
-    depends_on:
-      - ldap
-    extends:
-      file: ldap/docker-compose.yml
-      service: ui
+#  ldap-ui:
+#    depends_on:
+#      - ldap
+#    extends:
+#      file: ldap/docker-compose.yml
+#      service: ui
 
-  #  mongo:
-  #    extends:
-  #      file: mongo/docker-compose.yml
-  #      service: server
+#  mongo:
+#    extends:
+#      file: mongo/docker-compose.yml
+#      service: server
 
-  #  mongo-ui:
-  #    depends_on:
-  #      - mongo
-  #    extends:
-  #      file: mongo/docker-compose.yml
-  #      service: ui
+#  mongo-ui:
+#    depends_on:
+#      - mongo
+#    extends:
+#      file: mongo/docker-compose.yml
+#      service: ui
 
-  #  ollama:
-  #    extends:
-  #      file: ollama/docker-compose.yml
-  #      service: server
+#  ollama:
+#    extends:
+#      file: ollama/docker-compose.yml
+#      service: server
 
-  #  ollama-webui:
-  #    extends:
-  #      file: ollama/docker-compose.yml
-  #      service: webui
+#  ollama-webui:
+#    extends:
+#      file: ollama/docker-compose.yml
+#      service: webui
 
   pgadmin:
     depends_on:
