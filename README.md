@@ -182,7 +182,7 @@ http://${SERVER_IP}:4444/
 http://${SERVER_IP}:5050/
 
 # Docker Registry
-http://${SERVER_IP}:5080/
+http://${SERVER_IP}:5000/
 
 # Drone Server - CICD, you need to enable and trust repos for them to build
 http://${SERVER_IP}:8000/
