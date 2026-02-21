@@ -1,0 +1,9 @@
+services:
+  server:
+    container_name: kanidmd
+    image: kanidm/server:latest
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+    volumes:
+      - ${DEVSTACK_DIR:?err}/kanidm/data:/var/lib/kanidm

@@ -1,4 +1,0 @@
-clientai[ollama]
-fastapi[all]
-textual
-textual-dev

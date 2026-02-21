@@ -1,61 +1,42 @@
 services:
-  drone-runner:
-    depends_on:
-      - drone-server
-    extends:
-      file: drone/docker-compose.yml
-      service: runner
-
-  drone-server:
-    depends_on:
-      - gogs
-      - postgres
-    extends:
-      file: drone/docker-compose.yml
-      service: server
-
-  gogs:
-    depends_on:
-      - postgres
-    extends:
-      file: gogs/docker-compose.yml
-      service: server
-
-  grafana:
-    depends_on:
-      - influxdb
-    extends:
-      file: monitor/docker-compose.yml
-      service: grafana
-
-  influxdb:
-    extends:
-      file: monitor/docker-compose.yml
-      service: influxdb
-
-#  ldap:
+#  drone-runner:
+#    depends_on:
+#      - drone-server
 #    extends:
-#      file: ldap/docker-compose.yml
+#      file: drone/docker-compose.yml
+#      service: runner
+
+#  drone-server:
+#    depends_on:
+#      - gitea
+#      - postgres
+#    extends:
+#      file: drone/docker-compose.yml
 #      service: server
 
-#  ldap-ui:
-#    depends_on:
-#      - ldap
-#    extends:
-#      file: ldap/docker-compose.yml
-#      service: ui
+  gitea:
+    depends_on:
+      - postgres
+    extends:
+      file: gitea/docker-compose.yml
+      service: server
 
-#  mongo:
-#    extends:
-#      file: mongo/docker-compose.yml
-#      service: server
-
-#  mongo-ui:
+#  grafana:
 #    depends_on:
-#      - mongo
+#      - influxdb
 #    extends:
-#      file: mongo/docker-compose.yml
-#      service: ui
+#      file: monitor/docker-compose.yml
+#      service: grafana
+
+#  influxdb:
+#    extends:
+#      file: monitor/docker-compose.yml
+#      service: influxdb
+
+  kanidm:
+    extends:
+      file: kanidm/docker-compose.yml
+      service: server
 
 #  ollama:
 #    extends:
@@ -101,17 +82,12 @@ services:
   #      file: selenium/docker-compose.yml
   #      service: server
 
-  telegraf:
-    depends_on:
-      - influxdb
-    extends:
-      file: monitor/docker-compose.yml
-      service: telegraf
-
-  unit:
-    extends:
-      file: unit/docker-compose.yml
-      service: server
+#  telegraf:
+#    depends_on:
+#      - influxdb
+#    extends:
+#      file: monitor/docker-compose.yml
+#      service: telegraf
 
 networks:
   local:
