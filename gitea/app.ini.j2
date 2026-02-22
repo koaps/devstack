@@ -10,12 +10,12 @@ ROOT_URL = {{ gitea_root_url }}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [database]
-DB_TYPE = postgres
-HOST = postgres:5432 ; can use socket e.g. /var/run/postgresql/
-NAME = gitea
-USER = gitea
-PASSWD = gitea
-SCHEMA = gitea
+DB_TYPE = {{ gitea_db_type }}
+HOST = {{ gitea_db_host }}
+NAME = {{ gitea_db_name }}
+USER = {{ gitea_db_user }}
+PASSWD = {{ gitea_db_pass }}
+SCHEMA = {{ gitea_db_schema }}
 ;SSL_MODE=disable ;either "disable" (default), "require", or "verify-full"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

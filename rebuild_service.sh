@@ -1,9 +1,11 @@
 #!/bin/bash
 
+compose="docker compose"
+project=devstack
 service="$1"
 if [ -z $service ]; then echo "E: need to pass service name"; exit 1; fi
 
-docker-compose -p devstack rm -s $service
-docker-compose -p devstack pull $service
-docker-compose -p devstack build $service
-docker-compose -p devstack up --no-deps -d $service
+$compose -p $project rm -s $service
+$compose -p $project pull $service
+$compose -p $project build $service
+$compose -p $project up --no-deps -d $service

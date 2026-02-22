@@ -1,19 +1,16 @@
 services:
   server:
+    container_name: gitea
     image: docker.gitea.com/gitea:latest
     environment:
-      - GITEA_DB_TYPE=${GITEA_DB_TYPE:?err}
-      - GITEA_HOST=${GITEA_HOST:?err}
-      - GITEA_NAME=${GITEA_NAME:?err}
-      - GITEA_USER=${GITEA_USER:?err}
-      - GITEA_PASSWD=${GITEA_PASSWD:?err}
+      - USER_UID=1000
+      - USER_GID=1000
     ports:
       - 3000:3000
-      - 3022:2222
+      - 3022:22
     restart: unless-stopped
     volumes:
-      - ${DEVSTACK_DIR:?err}/gitea/data:/var/lib/gitea
-      - ${DEVSTACK_DIR:?err}/gitea/config:/etc/gitea
-      /etc/gitea/conf/app.ini
+      - ${DEVSTACK_DIR:?err}/gitea/data:/data
+      - ./conf/app.ini:/data/gitea/conf/app.ini
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
