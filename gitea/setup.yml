@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: wait for gitea to be ready
+      uri:
+        url: "http://{{ gitea_url }}/"
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 60
+      delay: 1
+
+    - name: check if user '{{ gitea_user }}' exists
+      uri:
+        url: "http://{{ gitea_url }}/api/v1/users/{{ gitea_user }}"
+        user: "{{ gitea_user }}"
+        password: "{{ gitea_pass }}"
+        force_basic_auth: true
+        status_code: [200,403,404]
+      register: user_result
+
+    - name: create user '{{ gitea_user }}'
+      shell: "docker exec gitea su -l git -c 'cd /app/gitea;./gitea admin create-user --name {{ gitea_user }} --password {{ gitea_pass }} --email {{ gitea_user }}@localhost --admin'"
+      when: user_result.status != 200

@@ -9,14 +9,16 @@ services:
 #  drone-server:
 #    depends_on:
 #      - gitea
-#      - postgres
+#      postgres:
+#        condition: service_healthy
 #    extends:
 #      file: drone/docker-compose.yml
 #      service: server
 
   gitea:
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     extends:
       file: gitea/docker-compose.yml
       service: server
@@ -50,7 +52,8 @@ services:
 
   pgadmin:
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     extends:
       file: postgres/docker-compose.yml
       service: pgadmin
