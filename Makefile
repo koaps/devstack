@@ -1,41 +1,40 @@
-name := devstack
+.POSIX:
+.PHONY: *
+.EXPORT_ALL_VARIABLES:
 
 .DEFAULT_GOAL := all
 
-## all target
-.PHONY: all
+CONTAINERD_SNAPSHOTTER=zfs
+
+name := devstack
+
+# Using nerdctl for container management
+cmd := sudo -E nerdctl
+
 all: build up clean app
 
-.PHONY: build
 build:
 	ansible -e '@.vars.yml' -m template -a "src=gitea/app.ini.j2 dest=gitea/conf/app.ini" localhost
-	docker compose build --pull
+	${cmd} compose build --pull
 
-## clean target
-.PHONY: clean
 clean:
-	@docker ps -aqf status=exited | xargs -I{} docker rm {}
-	@docker images -q -f dangling=true | xargs -I{} docker rmi {}
+	@${cmd} ps -aqf status=exited | xargs -I{} ${cmd} rm {}
+	@${cmd} images -q -f dangling=true | xargs -I{} ${cmd} rmi {}
 
-.PHONY: full_clean_up
-cleanup: down clean
-	@docker network rm local || true
+full_cleanup: down clean
+	@${cmd} network rm local || true
 	sudo rm -rf /home/devstack
 
-.PHONY: down
 down:
-	docker compose -p ${name} down -v
+	${cmd} compose -p ${name} down -v
 
-.PHONY: push
 push:
-	docker compose push
+	${cmd} compose push
 
-.PHONY: up
 up:
-	docker network inspect local >/dev/null 2>&1 && true || docker network create --subnet=172.16.16.0/24 local
-	COMPOSE_HTTP_TIMEOUT=300 docker compose -p ${name} up -d
+	${cmd} network inspect local >/dev/null 2>&1 && true || ${cmd} network create --subnet=172.16.16.0/24 local
+	COMPOSE_HTTP_TIMEOUT=300 ${cmd} compose -p ${name} up -d
 	#ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gitea/setup.yml
 
-.PHONY: pull_models
-app_get_config:
-	docker exec -it ollama_server ollama pull llama3.2:latest
+pull_models:
+	${cmd} exec -it ollama_server ollama pull llama3.2:latest

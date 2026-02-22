@@ -33,10 +33,10 @@ services:
 #      file: monitor/docker-compose.yml
 #      service: influxdb
 
-  kanidm:
-    extends:
-      file: kanidm/docker-compose.yml
-      service: server
+#  kanidm:
+#    extends:
+#      file: kanidm/docker-compose.yml
+#      service: server
 
 #  ollama:
 #    extends:
@@ -60,27 +60,27 @@ services:
       file: postgres/docker-compose.yml
       service: server
 
-  pypi-server:
-    extends:
-      file: pypi/docker-compose.yml
-      service: server
+#  pypi-server:
+#    extends:
+#      file: pypi/docker-compose.yml
+#      service: server
 
-  registry:
-    extends:
-      file: registry/docker-compose.yml
-      service: server
+#  registry:
+#    extends:
+#      file: registry/docker-compose.yml
+#      service: server
 
-  registry-ui:
-    depends_on:
-      - registry
-    extends:
-      file: registry/docker-compose.yml
-      service: ui
+#  registry-ui:
+#    depends_on:
+#      - registry
+#    extends:
+#      file: registry/docker-compose.yml
+#      service: ui
 
-  #  selenium:
-  #    extends:
-  #      file: selenium/docker-compose.yml
-  #      service: server
+#  selenium:
+#    extends:
+#      file: selenium/docker-compose.yml
+#      service: server
 
 #  telegraf:
 #    depends_on:
