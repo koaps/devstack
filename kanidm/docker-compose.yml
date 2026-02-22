@@ -1,6 +1,6 @@
 services:
   server:
-    container_name: kanidmd
+    container_name: kanidm
     image: kanidm/server:latest
     networks:
       - local

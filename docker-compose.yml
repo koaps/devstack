@@ -35,10 +35,10 @@ services:
 #      file: monitor/docker-compose.yml
 #      service: influxdb
 
-#  kanidm:
-#    extends:
-#      file: kanidm/docker-compose.yml
-#      service: server
+  kanidm:
+    extends:
+      file: kanidm/docker-compose.yml
+      service: server
 
 #  ollama:
 #    extends:
