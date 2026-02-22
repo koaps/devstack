@@ -21,5 +21,5 @@
       register: user_result
 
     - name: create user '{{ gitea_user }}'
-      shell: "docker exec gitea su -l git -c 'cd /app/gitea;./gitea admin create-user --name {{ gitea_user }} --password {{ gitea_pass }} --email {{ gitea_user }}@localhost --admin'"
+      shell: "docker exec gitea su -l git -c '/app/gitea/gitea -c /data/gitea/conf/app.ini admin user create --username {{ gitea_user }} --password {{ gitea_pass }} --email {{ gitea_user }}@local.host --admin'"
       when: user_result.status != 200

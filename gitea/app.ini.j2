@@ -4,9 +4,12 @@ RUN_USER = git
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [server]
-
 DOMAIN = {{ gitea_domain }}
 ROOT_URL = {{ gitea_root_url }}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[admin]
+DEFAULT_EMAIL_NOTIFICATIONS = disabled
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [database]
@@ -15,16 +18,12 @@ HOST = {{ gitea_db_host }}
 NAME = {{ gitea_db_name }}
 USER = {{ gitea_db_user }}
 PASSWD = {{ gitea_db_pass }}
-;SCHEMA = {{ gitea_db_schema }}
 ;SSL_MODE=disable ;either "disable" (default), "require", or "verify-full"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-[security]
-INSTALL_LOCK = true
-SECRET_KEY = {{ gitea_secret_key }}
-
-;; Secret used to validate communication within Gitea binary.
-INTERNAL_TOKEN =
+[log]
+MODE = console
+LEVEL = Info
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [oauth2]
@@ -67,20 +66,6 @@ INTERNAL_TOKEN =
 ;; * https://github.com/git-ecosystem/git-credential-manager
 ;; * https://gitea.com/gitea/tea
 ;DEFAULT_APPLICATIONS = git-credential-oauth, git-credential-manager, tea
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-[log]
-MODE = console
-LEVEL = Info
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;[repository.upload]
-;FILE_MAX_SIZE = 50
-;MAX_FILES = 5
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-[admin]
-DEFAULT_EMAIL_NOTIFICATIONS = disabled
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;[openid]
@@ -157,8 +142,31 @@ DEFAULT_EMAIL_NOTIFICATIONS = disabled
 ;ACCOUNT_LINKING = login
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;[session]
-;;
-;; Either "memory", "file", "redis", "db", "mysql", "couchbase", "memcache" or "postgres"
-;; Default is "memory". "db" will reuse the configuration in [database]
-;PROVIDER = memory
+[picture]
+DISABLE_GRAVATAR        = true
+ENABLE_FEDERATED_AVATAR = false
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[repository.upload]
+FILE_MAX_SIZE = 1024
+MAX_FILES     = 10
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = {{ gitea_secret_key }}
+
+;; Secret used to validate communication within Gitea binary.
+INTERNAL_TOKEN =
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[service]
+DISABLE_REGISTRATION = true
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[session]
+PROVIDER = db
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[webhook]
+ALLOWED_HOST_LIST = private

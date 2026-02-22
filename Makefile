@@ -31,7 +31,7 @@ push:
 up:
 	docker network inspect local >/dev/null 2>&1 && true || docker network create --subnet=172.16.16.0/24 local
 	COMPOSE_HTTP_TIMEOUT=300 docker compose -p ${name} up -d
-	#ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gitea/setup.yml
+	ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gitea/setup.yml
 
 pull_models:
 	docker exec -it ollama_server ollama pull llama3.2:latest
