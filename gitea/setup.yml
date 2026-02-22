@@ -17,7 +17,7 @@
         user: "{{ gitea_user }}"
         password: "{{ gitea_pass }}"
         force_basic_auth: true
-        status_code: [200,403,404]
+        status_code: [200,401,403,404]
       register: user_result
 
     - name: create user '{{ gitea_user }}'

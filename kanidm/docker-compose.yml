@@ -2,6 +2,8 @@ services:
   server:
     container_name: kanidmd
     image: kanidm/server:latest
+    networks:
+      - local
     ports:
       - 8443:8443
     restart: unless-stopped

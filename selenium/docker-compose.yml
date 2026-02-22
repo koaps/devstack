@@ -10,8 +10,8 @@ services:
       options:
         labels: container_group
     networks:
-    - local
+      - local
     ports:
-    - 4444:4444
-    - 7900:7900
+      - 7444:4444
+      - 7900:7900
     restart: unless-stopped

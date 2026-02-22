@@ -46,11 +46,11 @@ EOF
 
 cat >.vars.yml<<EOF
 gitea_domain: ${SERVER_IP}
-gitea_pass: gadm1n
+gitea_pass: adm1n
 gitea_root_url: http://${SERVER_IP}:3000
 gitea_secret_key: derp-derpy-derp
 gitea_url: 127.0.0.1:3000
-gitea_user: gadmin
+gitea_user: admin
 EOF
 ```
 
@@ -110,7 +110,7 @@ $ pypi-mirror create -d packages -m simple
 Now whereever you need to install pip packages use a pip.conf like this:
 ```
 [global]
-index-url=http://172.16.16.1:9000/simple
+index-url=http://172.16.16.1:9888/simple
 trusted-host=172.16.16.1
 ```
 This is the internal gateway IP of the docker server, it should work fine for anything in the devstack network.
@@ -127,31 +127,37 @@ http://${SERVER_IP}/
 # Gitea UI
 http://${SERVER_IP}:3000/
 
-# Selenium Server
-http://${SERVER_IP}:4444/
+# Grafana UI
+http://${SERVER_IP}:3080/
+
+# Registry API
+http://${SERVER_IP}:5000/
+
+# Registry UI
+http://${SERVER_IP}:5080/
 
 # pgAdmin - Postgres admin ui
-http://${SERVER_IP}:5050/
-
-# Registry
-http://${SERVER_IP}:5000/
+http://${SERVER_IP}:5480/
 
 # K3s API
 http://${SERVER_IP}:6443/
 
 # Drone Server - CICD, you need to enable and trust repos for them to build
-http://${SERVER_IP}:8000/
+http://${SERVER_IP}:7300/
 
-# Ollama WebUI
-http://${SERVER_IP}:8080/
+# Selenium Server
+http://${SERVER_IP}:7444/
 
 # Influxdb - has dashboards you can use to see monitoring datta
 http://${SERVER_IP}:8086/
 
-# Kanidm
+# Kanidm UI
 http://${SERVER_IP}:8443/
 
+# Ollama WebUI
+http://${SERVER_IP}:9780/
+
 # PIP Packages
-http://${SERVER_IP}:9000/packages/
+http://${SERVER_IP}:9888/packages/
 EOC
 ```

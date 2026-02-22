@@ -10,9 +10,9 @@ services:
       options:
         labels: container_group
     networks:
-    - local
+      - local
     ports:
-    - 9000:8080
+      - 9888:8080
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/packages:/data/packages
+      - ${DEVSTACK_DIR:?err}/packages:/data/packages

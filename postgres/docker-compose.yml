@@ -11,12 +11,12 @@ services:
       options:
         labels: container_group
     networks:
-    - local
+      - local
     ports:
-    - 5432:5432
+      - 5432:5432
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/postgres:/var/lib/postgresql/data
+      - ${DEVSTACK_DIR:?err}/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
       interval: 10s
@@ -38,7 +38,7 @@ services:
       options:
         labels: container_group
     networks:
-    - local
+      - local
     ports:
-    - 5050:80
+      - 5480:80
     restart: unless-stopped

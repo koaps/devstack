@@ -4,15 +4,15 @@ services:
     build: telegraf
     container_name: telegraf
     environment:
-    - INFLUX_DB_BUCKET=${INFLUX_DB_BUCKET:?err}
-    - INFLUX_DB_ORG=${INFLUX_DB_ORG:?err}
-    - INFLUX_DB_TOKEN=${INFLUX_DB_TOKEN:?err}
-    - HOST_ETC=/hostfs/etc
-    - HOST_PROC=/hostfs/proc
-    - HOST_SYS=/hostfs/sys
-    - HOST_VAR=/hostfs/var
-    - HOST_RUN=/hostfs/run
-    - HOST_MOUNT_PREFIX=/hostfs
+      - INFLUX_DB_BUCKET=${INFLUX_DB_BUCKET:?err}
+      - INFLUX_DB_ORG=${INFLUX_DB_ORG:?err}
+      - INFLUX_DB_TOKEN=${INFLUX_DB_TOKEN:?err}
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_VAR=/hostfs/var
+      - HOST_RUN=/hostfs/run
+      - HOST_MOUNT_PREFIX=/hostfs
     labels:
       container_group: monitor
     logging:
@@ -23,22 +23,22 @@ services:
     memswap_limit: 2G
     mem_reservation: 512m
     networks:
-    - local
+      - local
     restart: unless-stopped
     volumes:
-    - /:/hostfs:ro
+      - /:/hostfs:ro
 
   influxdb:
     image: influxdb:2
     container_name: influxdb
     environment:
-    - DOCKER_INFLUXDB_INIT_MODE=setup
-#    - DOCKER_INFLUXDB_INIT_CLI_CONFIG_NAME=devstack
-    - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_DB_USER:?err}
-    - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_DB_PASSWORD:?err}
-    - DOCKER_INFLUXDB_INIT_ORG=${INFLUX_DB_ORG:?err}
-    - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_DB_BUCKET:?err}
-    - INFLUXD_REPORTING_DISABLED=true
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+#      - DOCKER_INFLUXDB_INIT_CLI_CONFIG_NAME=devstack
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_DB_USER:?err}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_DB_PASSWORD:?err}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUX_DB_ORG:?err}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUX_DB_BUCKET:?err}
+      - INFLUXD_REPORTING_DISABLED=true
     labels:
       container_group: monitor
     logging:
@@ -49,14 +49,14 @@ services:
     memswap_limit: 2G
     mem_reservation: 512m
     networks:
-    - local
+      - local
     ports:
-    - 8086:8086
+      - 8086:8086
     restart: unless-stopped
 #    volumes:
-#    - ${DEVSTACK_DIR:?err}/influxdb/root:/root/.influxdbv2
-#    - ${DEVSTACK_DIR:?err}/influxdb/data:/influxdb2
-#    - ${DEVSTACK_DIR:?err}/influxdb/config:/etc/influxdb2
+#      - ${DEVSTACK_DIR:?err}/influxdb/root:/root/.influxdbv2
+#      - ${DEVSTACK_DIR:?err}/influxdb/data:/influxdb2
+#      - ${DEVSTACK_DIR:?err}/influxdb/config:/etc/influxdb2
 
   grafana:
     build:
@@ -66,10 +66,10 @@ services:
       dockerfile: monitor/grafana/Dockerfile
     container_name: grafana
     environment:
-    - GF_PATHS_HOME=/usr/share/grafana
-    - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel
-    - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASS:?err}
-    - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:?err}
+      - GF_PATHS_HOME=/usr/share/grafana
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASS:?err}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:?err}
     labels:
       container_group: monitor
     logging:
@@ -80,7 +80,7 @@ services:
     memswap_limit: 2G
     mem_reservation: 512m
     networks:
-    - local
+      - local
     ports:
-    - 3080:3080
+      - 3080:3080
     restart: unless-stopped

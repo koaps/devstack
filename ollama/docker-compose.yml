@@ -8,7 +8,7 @@ services:
         OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:latest}
     container_name: ollama_server
     environment:
-    - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_HOST=0.0.0.0:9734
     labels:
       container_group: ollama
     logging:
@@ -16,19 +16,19 @@ services:
       options:
         labels: container_group
     networks:
-    - local
+      - local
     ports:
-    - 11434:11434
+      - 9734:9734
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/ollama:/root/.ollama
+      - ${DEVSTACK_DIR:?err}/ollama:/root/.ollama
 
   webui:
     container_name: ollama_webui
     environment:
-    - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_BASE_URL=http://ollama:9734
     extra_hosts:
-    - "host.docker.internal:host-gateway"
+      - "host.docker.internal:host-gateway"
     image: ghcr.io/open-webui/open-webui:ollama
     labels:
       container_group: ollama
@@ -37,11 +37,11 @@ services:
       options:
         labels: container_group
     networks:
-    - local
+      - local
     ports:
-    - 8080:8080
+      - 9780:8080
     restart: unless-stopped
     volumes:
-    - ${DEVSTACK_DIR:?err}/ollama:/root/.ollama
-    - ${DEVSTACK_DIR:?err}/open-webui:/app/backend/data
+      - ${DEVSTACK_DIR:?err}/ollama:/root/.ollama
+      - ${DEVSTACK_DIR:?err}/open-webui:/app/backend/data
 
