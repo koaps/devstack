@@ -20,6 +20,8 @@ SERVER_IP=<YOUR_SERVER_IP>
 
 cat >.env<<EOF
 DEVSTACK_DIR=/home/devstack
+AUTH_HOST=${SERVER_IP}
+AUTH_DOMAIN=auth.local.domain
 DRONE_COOKIE_SECRET=some-random-words-here
 DRONE_DATABASE_DRIVER=postgres
 DRONE_DATABASE_SOURCE=postgres://drone:drone@postgres:5432/drone?sslmode=disable
@@ -27,11 +29,6 @@ DRONE_GITEA_SERVER=http://gitea:3000
 DRONE_RPC_SECRET=derpy-derp-derp
 DRONE_UI_PASSWORD=adm1n
 DRONE_UI_USERNAME=admin
-GITEA_DB_TYPE=postgres
-GITEA_HOST=db:5432
-GITEA_NAME=gitea
-GITEA_USER=gitea
-GITEA_PASSWD=gitea
 GRAFANA_ADMIN_PASS=adm1n
 GRAFANA_ADMIN_USER=admin
 INFLUX_DB_BUCKET=telegraf
@@ -39,25 +36,29 @@ INFLUX_DB_ORG=null
 INFLUX_DB_TOKEN=<Created Token>
 INFLUX_DB_PASSWORD=influxdb
 INFLUX_DB_USER=admin
-NGINX_HOST=${SERVER_IP}
 PGADMIN_EMAIL=admin@local.host
 PGADMIN_PASS=adm1n
 EOF
 
 cat >.vars.yml<<EOF
 gitea_domain: ${SERVER_IP}
-gitea_pass: adm1n
 gitea_root_url: http://${SERVER_IP}:3000
 gitea_secret_key: derp-derpy-derp
 gitea_url: 127.0.0.1:3000
 gitea_user: admin
+gitea_pass: adm1n
+gitea_db_type: postgres
+gitea_db_host: postgres:5432
+gitea_db_name: gitea
+gitea_db_user: gitea
+gitea_db_pass: gitea
+kanidm_domain: local.domain
+kanidm_origin: https://auth.local.domain:8443
 EOF
 ```
 
-
 ### Database passwords
 The DB password for gitea and drone is set via the initdb sql files, change them there if changing the vars above.
-
 
 ### To create the devstack
 * Build the images and run containers:
@@ -72,6 +73,52 @@ The DB password for gitea and drone is set via the initdb sql files, change them
   ```
   make down
   ```
+
+## TODO: Script these commands ##
+
+### Recover Logins for Kanidm
+```
+docker exec -it kanidm kanidmd recover-account admin
+docker exec -i -t kanidm kanidmd recover-account idm_admin
+```
+
+### Add Kanidm CA cert to Gitea (OAuth will fail without this)
+```
+docker cp /home/devstack/kanidm/ca.pem gitea:/usr/local/share/ca-certificates/kanidm.ca.crt
+docker exec gitea update-ca-certificates
+docker restart gitea
+```
+
+### Create Kanidm User
+```
+./kanidm_client.sh person create koaps Koaps
+./kanidm_client.sh person update koaps -m koaps@local.domain
+./kanidm_client.sh person credential create-reset-token koaps
+./kanidm_client.sh person credential use-reset-token xxxxx-xxxxx-xxxxx-xxxxx
+```
+#### Set a password and setup TOTP with an authenicator app, commit the changes
+
+### Create Kanidm OAuth for Gitea (replace SERVER_IP)
+Ref: https://kanidm.github.io/kanidm/stable/integrations/oauth2/examples.html#gitea
+```
+./kanidm_client.sh group create gitea_users
+./kanidm_client.sh group add-members gitea_users koaps
+./kanidm_client.sh system oauth2 create gitea Gitea http://${SERVER_IP}:3000/user/login
+./kanidm_client.sh system oauth2 add-redirect-url gitea http://${SERVER_IP}:3000/user/oauth2/kanidm/callback
+./kanidm_client.sh system oauth2 update-scope-map gitea gitea_users email openid profile groups
+./kanidm_client.sh system oauth2 warning-insecure-client-disable-pkce gitea
+./kanidm_client.sh system oauth2 show-basic-secret gitea
+```
+
+### Add OAuth to Gitea (replace show-basic-secret and dicovery url)
+```
+docker exec gitea su -l git -c '/app/gitea/gitea -c /data/gitea/conf/app.ini admin auth add-oauth \
+    --provider=openidConnect \
+    --name=kanidm \
+    --key=gitea \
+    --secret=show-basic-secret \
+    --auto-discover-url=https://auth.local.domain:8443/oauth2/openid/gitea/.well-known/openid-configuration'
+```
 
 ### To create a token for grafana and telegraf
 * Create an api token

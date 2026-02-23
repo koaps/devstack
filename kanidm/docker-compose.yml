@@ -2,6 +2,8 @@ services:
   server:
     container_name: kanidm
     image: kanidm/server:latest
+    extra_hosts:
+      - "${AUTH_DOMAIN:?err}=${AUTH_HOST:?err}"
     networks:
       - local
     ports:

@@ -5,6 +5,8 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+    extra_hosts:
+      - "${AUTH_DOMAIN:?err}=${AUTH_HOST:?err}"
     networks:
     - local
     ports:
