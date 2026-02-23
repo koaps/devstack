@@ -76,17 +76,22 @@ The DB password for gitea and drone is set via the initdb sql files, change them
 
 ## TODO: Script these commands ##
 
+### Add Kanidm CA cert to Gitea (OAuth will fail without this)
+```
+docker cp /home/devstack/kanidm/ca.pem gitea:/usr/local/share/ca-certificates/kanidm.ca.crt
+docker exec gitea update-ca-certificates
+docker restart gitea
+```
+
 ### Recover Logins for Kanidm
 ```
 docker exec -it kanidm kanidmd recover-account admin
 docker exec -i -t kanidm kanidmd recover-account idm_admin
 ```
 
-### Add Kanidm CA cert to Gitea (OAuth will fail without this)
+### Login to idm admin
 ```
-docker cp /home/devstack/kanidm/ca.pem gitea:/usr/local/share/ca-certificates/kanidm.ca.crt
-docker exec gitea update-ca-certificates
-docker restart gitea
+./kanidm_client.sh login -D idm_admin
 ```
 
 ### Create Kanidm User
