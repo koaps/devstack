@@ -6,12 +6,11 @@
 
 CONTAINERD_SNAPSHOTTER=zfs
 
-name := devstack
-
 all: build up
 
 build:
 	ansible -e '@.vars.yml' -m template -a "src=gitea/app.ini.j2 dest=gitea/conf/app.ini" localhost
+	ansible -e '@.vars.yml' -m template -a "src=kanidm/server.toml.j2 dest=kanidm/conf/server.toml" localhost
 	docker compose build
 
 clean:
@@ -23,14 +22,14 @@ full_cleanup: down clean
 	sudo rm -rf /home/devstack
 
 down:
-	docker compose -p ${name} down -v
+	docker compose -p devstack down -v
 
 push:
 	docker compose push
 
 up:
 	docker network inspect local >/dev/null 2>&1 && true || docker network create --subnet=172.16.16.0/24 local
-	COMPOSE_HTTP_TIMEOUT=300 docker compose -p ${name} up -d
+	COMPOSE_HTTP_TIMEOUT=300 docker compose -p devstack up -d
 	ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gitea/setup.yml
 
 pull_models:

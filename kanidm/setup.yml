@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: generate certs
+      shell: "docker run -it --rm -v /home/devstack/kanidm:/data -v ./kanidm/conf/server.toml:/data/server.toml kanidm/server:latest kanidmd cert-generate"
