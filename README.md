@@ -20,20 +20,23 @@ SERVER_IP=<YOUR_SERVER_IP>
 
 cat >.env<<EOF
 DEVSTACK_DIR=/home/devstack
-AUTH_HOST=${SERVER_IP}
 AUTH_DOMAIN=auth.local.domain
+AUTH_HOST=${SERVER_IP}
 DRONE_COOKIE_SECRET=some-random-words-here
 DRONE_DATABASE_DRIVER=postgres
 DRONE_DATABASE_SOURCE=postgres://drone:drone@postgres:5432/drone?sslmode=disable
-DRONE_GITEA_SERVER=http://gitea:3000
+DRONE_GITEA_CLIENT_ID=
+DRONE_GITEA_CLIENT_SECRET=
+DRONE_GITEA_SERVER=http://${SERVER_IP}:3000
 DRONE_RPC_SECRET=derpy-derp-derp
+DRONE_SERVER_HOST=http://${SERVER_IP}:7380
 DRONE_UI_PASSWORD=adm1n
 DRONE_UI_USERNAME=admin
 GRAFANA_ADMIN_PASS=adm1n
 GRAFANA_ADMIN_USER=admin
 INFLUX_DB_BUCKET=telegraf
 INFLUX_DB_ORG=null
-INFLUX_DB_TOKEN=<Created Token>
+INFLUX_DB_TOKEN=
 INFLUX_DB_PASSWORD=influxdb
 INFLUX_DB_USER=admin
 PGADMIN_EMAIL=admin@local.host
@@ -67,6 +70,7 @@ The DB password for gitea and drone is set via the initdb sql files, change them
 
   docker compose ps
   ```
+NOTE: this will fail if below .env vars are missing
 
 ### To stop the devstack
 * Just run make down
@@ -75,6 +79,18 @@ The DB password for gitea and drone is set via the initdb sql files, change them
   ```
 
 ## TODO: Script these commands ##
+
+HERE BE DRAGONS!!!
+
+Right now rebuilding services with make can break the OAuth2 setup for Gitea.
+Re-run the CA cert copy steps and then in the Gitea UI, go to the Kanidm authentication source
+and click the blue button to update it, this should give a green success message the top.
+
+### Create Kanidm certs
+```
+make build
+docker run -it --rm -v /home/devstack/kanidm:/data -v ./kanidm/conf/server.toml:/data/server.toml docker.io/kanidm/server:latest kanidmd cert-generate
+```
 
 ### Add Kanidm CA cert to Gitea (OAuth will fail without this)
 ```
@@ -115,7 +131,7 @@ Ref: https://kanidm.github.io/kanidm/stable/integrations/oauth2/examples.html#gi
 ./kanidm_client.sh system oauth2 show-basic-secret gitea
 ```
 
-### Add OAuth to Gitea (replace show-basic-secret and dicovery url)
+### Add OAuth2 source to Gitea for Kanidm (replace show-basic-secret and dicovery url)
 ```
 docker exec gitea su -l git -c '/app/gitea/gitea -c /data/gitea/conf/app.ini admin auth add-oauth \
     --provider=openidConnect \
@@ -124,6 +140,13 @@ docker exec gitea su -l git -c '/app/gitea/gitea -c /data/gitea/conf/app.ini adm
     --secret=show-basic-secret \
     --auto-discover-url=https://auth.local.domain:8443/oauth2/openid/gitea/.well-known/openid-configuration'
 ```
+
+### Add OAuth2 application for drone
+Ref: https://docs.drone.io/server/provider/gitea/#configuration
+
+* Update .env values
+DRONE_GITEA_CLIENT_ID=
+DRONE_GITEA_CLIENT_SECRET=
 
 ### To create a token for grafana and telegraf
 * Create an api token
@@ -195,7 +218,7 @@ http://${SERVER_IP}:5480/
 http://${SERVER_IP}:6443/
 
 # Drone Server - CICD, you need to enable and trust repos for them to build
-http://${SERVER_IP}:7300/
+http://${SERVER_IP}:7380/
 
 # Selenium Server
 http://${SERVER_IP}:7444/

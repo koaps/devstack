@@ -30,7 +30,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   server:
-    image: drone/drone
+    image: drone/drone:2
     container_name: drone_server
     environment:
       - DRONE_AGENTS_ENABLED=true
@@ -39,17 +39,19 @@ services:
       - DRONE_DATADOG_ENABLED=false
       - DRONE_DATADOG_ENDPOINT=
       - DRONE_GIT_ALWAYS_AUTH=false
-      - DRONE_GOGS_SERVER=${DRONE_GOGS_SERVER:?err}
-      - DRONE_GOGS_SKIP_VERIFY=true
+      - DRONE_GITEA_CLIENT_ID=${DRONE_GITEA_CLIENT_ID:?err}
+      - DRONE_GITEA_CLIENT_SECRET=${DRONE_GITEA_CLIENT_SECRET:?err}
+      - DRONE_GITEA_SERVER=${DRONE_GITEA_SERVER:?err}
+      - DRONE_GITEA_SKIP_VERIFY=true
       - DRONE_LIMIT_TRUSTED=false
       - DRONE_LOGS_DEBUG=true
       - DRONE_REGISTRATION_CLOSED=false
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET:?err}
       - DRONE_RUNNER_CAPACITY=2
-      - DRONE_SERVER_HOST=drone_server
+      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST:?err}
       - DRONE_SERVER_PROTO=http
       - DRONE_TLS_AUTOCERT=false
-      - DRONE_USER_CREATE=username:${GOGS_ADMIN:?err},admin:true
+      - DRONE_USER_CREATE=username:${DRONE_UI_USERNAME:?err},admin:true
       - DRONE_COOKIE_SECRET=${DRONE_COOKIE_SECRET:?err}
     labels:
       container_group: drone

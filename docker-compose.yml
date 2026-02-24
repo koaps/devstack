@@ -1,19 +1,20 @@
 services:
-#  drone-runner:
-#    depends_on:
-#      - drone-server
-#    extends:
-#      file: drone/docker-compose.yml
-#      service: runner
+  drone-runner:
+    depends_on:
+      - drone-server
+    extends:
+      file: drone/docker-compose.yml
+      service: runner
 
-#  drone-server:
-#    depends_on:
-#      - gitea
-#      postgres:
-#        condition: service_healthy
-#    extends:
-#      file: drone/docker-compose.yml
-#      service: server
+  drone-server:
+    depends_on:
+      gitea:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    extends:
+      file: drone/docker-compose.yml
+      service: server
 
   gitea:
     depends_on:
