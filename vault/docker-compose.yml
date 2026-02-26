@@ -1,6 +1,6 @@
 services:
   server:
-    container_name: kanidm
+    container_name: vault
     image: openbao/openbao:latest
     command: ['server', '-config=/openbao/config/bao.conf']
     cap_add:
