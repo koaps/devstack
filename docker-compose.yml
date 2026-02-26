@@ -64,22 +64,22 @@ services:
       file: postgres/docker-compose.yml
       service: server
 
-#  pypi-server:
-#    extends:
-#      file: pypi/docker-compose.yml
-#      service: server
+  pypi-server:
+    extends:
+      file: pypi/docker-compose.yml
+      service: server
 
-#  registry:
-#    extends:
-#      file: registry/docker-compose.yml
-#      service: server
+  registry:
+    extends:
+      file: registry/docker-compose.yml
+      service: server
 
-#  registry-ui:
-#    depends_on:
-#      - registry
-#    extends:
-#      file: registry/docker-compose.yml
-#      service: ui
+  registry-ui:
+    depends_on:
+      - registry
+    extends:
+      file: registry/docker-compose.yml
+      service: ui
 
 #  selenium:
 #    extends:

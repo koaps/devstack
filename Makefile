@@ -9,8 +9,8 @@ CONTAINERD_SNAPSHOTTER=zfs
 all: build up
 
 build:
-	ansible -e '@.vars.yml' -m template -a "src=gitea/app.ini.j2 dest=gitea/conf/app.ini" localhost
-	ansible -e '@.vars.yml' -m template -a "src=kanidm/server.toml.j2 dest=kanidm/conf/server.toml" localhost
+	ansible -e '@.vars.yml' -m template -a "src=gitea/app.ini.j2 dest=gitea/conf/app.ini force=no" localhost
+	ansible -e '@.vars.yml' -m template -a "src=kanidm/server.toml.j2 dest=kanidm/conf/server.toml force=no" localhost
 	docker compose build
 
 clean:

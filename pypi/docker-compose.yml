@@ -12,7 +12,7 @@ services:
     networks:
       - local
     ports:
-      - 9888:8080
+      - 7080:8080
     restart: unless-stopped
     volumes:
       - ${DEVSTACK_DIR:?err}/packages:/data/packages
