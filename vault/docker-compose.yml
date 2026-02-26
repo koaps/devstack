@@ -29,4 +29,5 @@ services:
       - 8200:8200
     restart: unless-stopped
     volumes:
-      - ./bao.conf:/openbao/config/bao.conf
+      - ./bao.conf:/openbao/config/bao.conf:ro
+      - ./secrets:/openbao/secrets
