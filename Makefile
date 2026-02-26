@@ -4,8 +4,6 @@
 
 .DEFAULT_GOAL := all
 
-CONTAINERD_SNAPSHOTTER=zfs
-
 all: build up
 
 build:
