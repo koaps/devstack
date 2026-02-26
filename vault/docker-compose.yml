@@ -1,0 +1,32 @@
+services:
+  server:
+    container_name: kanidm
+    image: openbao/openbao:latest
+    command: ['server', '-config=/openbao/config/bao.conf']
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_DISABLE_MLOCK=true
+      - VAULT_PG_CONNECTION_URL=${VAULT_DB_SOURCE:?err}
+    extra_hosts:
+      - "${AUTH_DOMAIN:?err}=${AUTH_HOST:?err}"
+    healthcheck:
+      interval: 2s
+      retries: 10
+      start_period: 5s
+      test: 'wget --spider http://127.0.0.1:8200/v1/sys/seal-status || exit 1'
+      timeout: 10s
+    labels:
+      container_group: vault
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+      - local
+    ports:
+      - 8200:8200
+    restart: unless-stopped
+    volumes:
+      - ./bao.conf:/openbao/config/bao.conf

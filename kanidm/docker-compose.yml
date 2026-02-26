@@ -4,6 +4,12 @@ services:
     image: kanidm/server:latest
     extra_hosts:
       - "${AUTH_DOMAIN:?err}=${AUTH_HOST:?err}"
+    labels:
+      container_group: kanidm
+    logging:
+      driver: journald
+      options:
+        labels: container_group
     networks:
       - local
     ports:

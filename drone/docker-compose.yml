@@ -34,8 +34,8 @@ services:
     container_name: drone_server
     environment:
       - DRONE_AGENTS_ENABLED=true
-      - DRONE_DATABASE_DATASOURCE=${DRONE_DATABASE_SOURCE:?err}
-      - DRONE_DATABASE_DRIVER=${DRONE_DATABASE_DRIVER:?err}
+      - DRONE_DATABASE_DATASOURCE=${DRONE_DB_SOURCE:?err}
+      - DRONE_DATABASE_DRIVER=${DRONE_DB_DRIVER:?err}
       - DRONE_DATADOG_ENABLED=false
       - DRONE_DATADOG_ENDPOINT=
       - DRONE_GIT_ALWAYS_AUTH=false

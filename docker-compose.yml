@@ -93,6 +93,14 @@ services:
 #      file: monitor/docker-compose.yml
 #      service: telegraf
 
+  vault:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    extends:
+      file: vault/docker-compose.yml
+      service: server
+
 networks:
   local:
     external: true

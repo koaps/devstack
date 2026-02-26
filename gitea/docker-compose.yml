@@ -7,6 +7,12 @@ services:
       - USER_GID=1000
     extra_hosts:
       - "${AUTH_DOMAIN:?err}=${AUTH_HOST:?err}"
+    labels:
+      container_group: gitea
+    logging:
+      driver: journald
+      options:
+        labels: container_group
     networks:
     - local
     ports:

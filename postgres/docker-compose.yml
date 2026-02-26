@@ -4,6 +4,11 @@ services:
     build: image/.
     image: 172.16.16.1:5000/postgres:latest
     container_name: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     labels:
       container_group: postgres
     logging:
@@ -17,12 +22,6 @@ services:
     restart: unless-stopped
     volumes:
       - ${DEVSTACK_DIR:?err}/postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-
 
   pgadmin:
     container_name: pgadmin
