@@ -2,7 +2,7 @@ services:
   server:
     container_name: vault
     image: openbao/openbao:latest
-    command: ['server', '-config=/openbao/config/bao.conf']
+    command: ['server', '-config=/openbao/config/vault.conf']
     cap_add:
       - IPC_LOCK
     environment:
@@ -12,11 +12,11 @@ services:
     extra_hosts:
       - "${AUTH_DOMAIN:?err}=${AUTH_HOST:?err}"
     healthcheck:
-      interval: 2s
-      retries: 10
-      start_period: 5s
-      test: 'wget --spider http://127.0.0.1:8200/v1/sys/seal-status || exit 1'
+      test: 'wget --spider -q -T5 -S http://127.0.0.1:8200/v1/sys/health 2>&1 | grep "200 OK" > /dev/null'
+      interval: 30s
       timeout: 10s
+      retries: 5
+      start_period: 10s
     labels:
       container_group: vault
     logging:
@@ -29,5 +29,5 @@ services:
       - 8200:8200
     restart: unless-stopped
     volumes:
-      - ./bao.conf:/openbao/config/bao.conf:ro
+      - ./vault.conf:/openbao/config/vault.conf:ro
       - ./secrets:/openbao/secrets
