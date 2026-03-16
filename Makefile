@@ -7,8 +7,6 @@
 all: build up
 
 build:
-	ansible -e '@.vars.yml' -m template -a "src=gitea/app.ini.j2 dest=gitea/conf/app.ini force=no" localhost
-	ansible -e '@.vars.yml' -m template -a "src=kanidm/server.toml.j2 dest=kanidm/conf/server.toml force=no" localhost
 	docker compose build
 
 clean:
@@ -27,8 +25,9 @@ push:
 
 up:
 	docker network inspect local >/dev/null 2>&1 && true || docker network create --subnet=172.16.16.0/24 local
+	ansible-playbook -e '@vars.yml' --inventory 127.0.0.1, setup.yml
 	COMPOSE_HTTP_TIMEOUT=300 docker compose -p devstack up -d
-	ansible-playbook -e '@.vars.yml' --inventory 127.0.0.1, gitea/setup.yml
+	ansible-playbook -e '@vars.yml' --inventory 127.0.0.1, gitea/setup.yml
 
 pull_models:
 	docker exec -it ollama_server ollama pull llama3.2:latest

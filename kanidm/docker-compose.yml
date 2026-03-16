@@ -17,4 +17,3 @@ services:
     restart: unless-stopped
     volumes:
       - ${DEVSTACK_DIR:?err}/kanidm:/data
-      - ./conf/server.toml:/data/server.toml

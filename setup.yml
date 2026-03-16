@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Include variables from a YAML file
+      ansible.builtin.include_vars:
+        file: vars.yml
+      tags: always
+
+    - name: Create devstack home directory
+      ansible.builtin.file:
+        path: "{{ item }}"
+        owner: "{{ devstack_owner | split('.') | first }}"
+        group: "{{ devstack_owner | split('.') | last }}"
+        mode: '0750'
+        state: directory
+      become: true
+      loop:
+        - "{{ devstack_home }}/gitea"
+        - "{{ devstack_home }}/kanidm"
+
+    - name: Create gitea app.ini
+      ansible.builtin.template:
+        src: gitea/app.ini.j2
+        dest: "{{ devstack_home }}/gitea/app.ini"
+        force: no
+
+    - name: Create kanidm server.toml
+      ansible.builtin.template:
+        src: kanidm/server.toml.j2
+        dest: "{{ devstack_home }}/kanidm/server.toml"
+        force: no
+
+    - name: Generate certs
+      ansible.builtin.shell:
+        cmd: "docker run --rm -v {{ devstack_home }}/kanidm:/data kanidm/server:latest kanidmd cert-generate"
+        creates: "{{ devstack_home }}/kanidm/ca.pem"

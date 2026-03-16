@@ -21,6 +21,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DEVSTACK_DIR:?err}/gitea/data:/data
-      - ./conf/app.ini:/data/gitea/conf/app.ini
+      - ${DEVSTACK_DIR:?err}/gitea/app.ini:/data/gitea/conf/app.ini
+      - ${DEVSTACK_DIR:?err}/kanidm/ca.pem:/usr/local/share/ca-certificates/kanidm.ca.crt:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

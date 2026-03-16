@@ -43,7 +43,9 @@ PGADMIN_EMAIL=admin@local.host
 PGADMIN_PASS=adm1n
 EOF
 
-cat >.vars.yml<<EOF
+cat >vars.yml<<EOF
+devstack_home: /home/devstack
+devstack_owner: koaps.koaps
 gitea_domain: ${SERVER_IP}
 gitea_root_url: http://${SERVER_IP}:3000
 gitea_secret_key: derp-derpy-derp

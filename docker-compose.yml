@@ -18,6 +18,8 @@ services:
 
   gitea:
     depends_on:
+      kanidm:
+        condition: service_started
       postgres:
         condition: service_healthy
     extends:
