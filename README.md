@@ -89,6 +89,7 @@ NOTE: this will fail if below .env vars are missing
 HERE BE DRAGONS!!!
 
 Right now rebuilding services with make can break the OAuth2 setup for Gitea.
+
 Re-run the CA cert copy steps and then in the Gitea UI, go to the Kanidm authentication source
 and click the blue button to update it, this should give a green success message the top.
 
@@ -150,16 +151,24 @@ docker exec gitea su -l git -c '/app/gitea/gitea -c /data/gitea/conf/app.ini adm
 ### Add OAuth2 application for drone
 Ref: https://docs.drone.io/server/provider/gitea/#configuration
 
-* Update .env values
-DRONE_GITEA_CLIENT_ID
-DRONE_GITEA_CLIENT_SECRET
+Create an application integration in Gitea
+- Application Name: `drone`
+- Redirect URI: `http://<SERVER_IP>:7380/login`
+
+Update .env values
+- DRONE_GITEA_CLIENT_ID
+- DRONE_GITEA_CLIENT_SECRET
 
 ### Add OAuth2 application for opengist
 Ref: https://opengist.io/docs/configuration/oauth-providers.html
 
-* Update .env values
-OG_GITEA_CLIENT_KEY
-OG_GITEA_SECRET
+Create an application integration in Gitea
+- Application Name: `opengist`
+- Redirect URI: `http://<SERVER_IP>:6157/oauth/gitea/callback`
+
+Update .env values
+- OG_GITEA_CLIENT_KEY
+- OG_GITEA_SECRET
 
 ### To create a token for grafana and telegraf
 * Create an api token
