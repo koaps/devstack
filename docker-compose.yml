@@ -43,6 +43,16 @@ services:
       file: kanidm/docker-compose.yml
       service: server
 
+  opengist:
+    depends_on:
+      gitea:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    extends:
+      file: opengist/docker-compose.yml
+      service: server
+
 #  ollama:
 #    extends:
 #      file: ollama/docker-compose.yml

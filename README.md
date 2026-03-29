@@ -14,7 +14,7 @@ You can re-run make fairly safely to push updates and changes since it uses exte
 
 ### Create the `.env` file:
 Replace `<YOUR_SERVER_IP>` with the ip of your docker server
-
+Replace `<FILL-IN>` sections with correct info
 ```
 SERVER_IP=<YOUR_SERVER_IP>
 
@@ -25,22 +25,26 @@ AUTH_HOST=${SERVER_IP}
 DRONE_COOKIE_SECRET=some-random-words-here
 DRONE_DATABASE_DRIVER=postgres
 DRONE_DATABASE_SOURCE=postgres://drone:drone@postgres:5432/drone?sslmode=disable
-DRONE_GITEA_CLIENT_ID=
-DRONE_GITEA_CLIENT_SECRET=
-DRONE_GITEA_SERVER=http://${SERVER_IP}:3000
+DRONE_GITEA_CLIENT_ID=<FILL-IN>
+DRONE_GITEA_CLIENT_SECRET=<FILL-IN>
 DRONE_RPC_SECRET=derpy-derp-derp
 DRONE_SERVER_HOST=http://${SERVER_IP}:7380
 DRONE_UI_PASSWORD=adm1n
 DRONE_UI_USERNAME=admin
+GITEA_SERVER=http://${SERVER_IP}:3000
 GRAFANA_ADMIN_PASS=adm1n
 GRAFANA_ADMIN_USER=admin
 INFLUX_DB_BUCKET=telegraf
 INFLUX_DB_ORG=null
-INFLUX_DB_TOKEN=
+INFLUX_DB_TOKEN=<FILL-IN>
 INFLUX_DB_PASSWORD=influxdb
 INFLUX_DB_USER=admin
+OG_DB_URI=postgres://opengist:opengist@postgres:5432/opengist?sslmode=disable
+OG_GITEA_CLIENT_KEY=<FILL-IN>
+OG_GITEA_SECRET=<FILL-IN>
 PGADMIN_EMAIL=admin@local.host
 PGADMIN_PASS=adm1n
+VAULT_DB_SOURCE=postgres://vault:vault@postgres:5432/vault?sslmode=disable
 EOF
 
 cat >vars.yml<<EOF
@@ -104,7 +108,7 @@ docker restart gitea
 ### Recover Logins for Kanidm
 ```
 docker exec -it kanidm kanidmd recover-account admin
-docker exec -i -t kanidm kanidmd recover-account idm_admin
+docker exec -it kanidm kanidmd recover-account idm_admin
 ```
 
 ### Login to idm admin
@@ -147,8 +151,15 @@ docker exec gitea su -l git -c '/app/gitea/gitea -c /data/gitea/conf/app.ini adm
 Ref: https://docs.drone.io/server/provider/gitea/#configuration
 
 * Update .env values
-DRONE_GITEA_CLIENT_ID=
-DRONE_GITEA_CLIENT_SECRET=
+DRONE_GITEA_CLIENT_ID
+DRONE_GITEA_CLIENT_SECRET
+
+### Add OAuth2 application for opengist
+Ref: https://opengist.io/docs/configuration/oauth-providers.html
+
+* Update .env values
+OG_GITEA_CLIENT_KEY
+OG_GITEA_SECRET
 
 ### To create a token for grafana and telegraf
 * Create an api token
@@ -215,6 +226,9 @@ http://${SERVER_IP}:5080/
 
 # pgAdmin - Postgres admin ui
 http://${SERVER_IP}:5480/
+
+# Opengist
+http://${SERVER_IP}:6157/
 
 # K3s API
 http://${SERVER_IP}:6443/

@@ -1,0 +1,24 @@
+services:
+
+  server:
+    container_name: opengist
+    image: ghcr.io/thomiceli/opengist:latest
+    environment:
+      - OG_DB_URI=${OG_DB_URI:?err}
+      - OG_GITEA_CLIENT_KEY=${OG_GITEA_CLIENT_KEY:?err}
+      - OG_GITEA_SECRET=${OG_GITEA_SECRET:?err}
+      - OG_GITEA_URL=${GITEA_SERVER:?err}
+    labels:
+      container_group: opengist
+    logging:
+      driver: journald
+      options:
+        labels: container_group
+    networks:
+      - local
+    ports:
+      - 6157:6157
+      - 2222:2222
+    restart: unless-stopped
+    volumes:
+      - ${DEVSTACK_DIR:?err}/opengist:/opengist
